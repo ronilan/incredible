@@ -1,0 +1,63 @@
+[package]
+name = "incredible"
+version = "0.1.0"
+edition = "2024"
+default-run = "incredible"
+
+[package.metadata.html]
+title = "Incredible :: A Modern Rust TUI Framework"
+description = "A Rust TUI Framework for the 2nd Quarter of the 21st Century (Experimental, Modular, Declarative, Reactive, Event Driven)"
+keywords = "tui, rust, wasm, template"
+cname = "www.incredible.rs"
+
+[package.metadata.bundle]
+app_name = "Incredible"
+binary_name = "incredible_macos"
+icon_source = "web/favicon.svg"
+
+[workspace]
+
+[lib]
+crate-type = ["cdylib"]
+
+[[bin]]
+name = "incredible"
+path = "src/main.rs"
+
+[[bin]]
+name = "incredible_macos"
+path = "src/macos.rs"
+
+[[bin]]
+name = "incredible_windows"
+path = "src/windows.rs"
+
+[features]
+default = []
+macos-native = [
+    "incredible_elements/macos-native",
+    "incredible_window_macos",
+]
+windows-native = [
+    "incredible_elements/windows-native",
+    "incredible_window_windows",
+]
+
+[dependencies]
+incredible = { git = "https://github.com/ronilan/incredible-alpha" }
+incredible_elements = { git = "https://github.com/ronilan/incredible-alpha" }
+incredible_elements_extra = { git = "https://github.com/ronilan/incredible-alpha" }
+incredible_elements_text_fonts  = { git = "https://github.com/ronilan/incredible-alpha" }
+incredible_helpers_layout = { git = "https://github.com/ronilan/incredible-alpha" }
+incredible_helpers_effects = { git = "https://github.com/ronilan/incredible-alpha" }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+console_error_panic_hook = "0.1"
+
+
+[target.'cfg(target_os = "macos")'.dependencies]
+incredible_window_macos = { git = "https://github.com/ronilan/incredible-alpha", optional = true }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+incredible_window_windows = { git = "https://github.com/ronilan/incredible-alpha", optional = true }

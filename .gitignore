@@ -1,0 +1,31 @@
+# anything, anywhere starting with __
+__*
+~~*
+
+# Local development
+*.env
+*.dev
+
+# Apple
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Rust
+Cargo.lock
+# Rust build artifacts
+/target
+/dist
+
+# JavaScript / pnpm workspace
+**/node_modules
+pnpm-debug.log*
+.pnpm-store*
