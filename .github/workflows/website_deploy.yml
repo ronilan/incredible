@@ -29,29 +29,69 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      # Standard checkout — pulls the repo contents onto the runner so
+      # later steps have something to build from.
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # This repo depends on a PRIVATE repo (incredible-alpha) via Cargo.toml.
+      # Anonymous `git` over HTTPS can't clone private repos, so we rewrite every
+      # "https://github.com/" URL to embed a PAT as credentials before Cargo/git
+      # tries to fetch it. The token lives in repo secret INCREDIBLE_ALPHA
+      # (Settings > Secrets and variables > Actions). If this step is ever
+      # removed, the WASM build step below will fail with an auth/404-style
+      # error on the private dependency, not an obvious "auth failed" message.
+      - name: Configure Git for Private Dependency
+        run: |
+          git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
+
+      # Installs the pnpm CLI on the runner (pnpm isn't preinstalled like npm is).
+      # Needed before any `pnpm install` / `pnpm run` calls below.
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
 
+      # Prepares the runner for a GitHub Pages deployment (sets up Pages-specific
+      # env/config) and ensures Node.js is available. This does NOT install project
+      # dependencies — that's the separate "Install dependencies" step below.
       - name: Setup Pages & Node
         uses: actions/configure-pages@v5 
 
+      # wasm-pack compiles Rust -> WebAssembly and packages it for JS consumption.
+      # It's not bundled with the Rust toolchain, so it has to be installed
+      # explicitly via its installer script.
       - name: Install wasm-pack
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
+      # Installs JS dependencies declared in package.json (via pnpm-lock.yaml).
+      # Required before running any pnpm scripts, including build:wasm below.
       - name: Install dependencies
         run: pnpm install
 
+      # Runs the project's build:wasm script (defined in package.json), which
+      # invokes wasm-pack/cargo to compile the Rust code to WASM.
+      #
+      # CARGO_NET_GIT_FETCH_WITH_CLI tells Cargo to shell out to the system's
+      # `git` binary instead of using its built-in libgit2 fetcher. This matters
+      # because only the system git picks up the credential rewrite configured
+      # above (`git config --global url...insteadOf`) — libgit2 ignores it and
+      # will fail to fetch the private incredible-alpha dependency without this.
       - name: Build WASM assets
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
         run: pnpm run build:wasm
 
+      # Packages the contents of the 'docs' folder (the build output directory
+      # for this project) into an artifact that GitHub Pages can serve.
+      # If the build output ever moves to a different folder, this path must
+      # be updated too, or Pages will deploy stale/empty content.
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'docs' 
 
+      # Publishes the uploaded artifact to GitHub Pages. The resulting live
+      # URL is exposed as steps.deployment.outputs.page_url, which is what
+      # populates the `environment.url` field at the top of this job.
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
