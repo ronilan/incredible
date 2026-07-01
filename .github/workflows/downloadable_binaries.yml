@@ -23,9 +23,9 @@ jobs:
       matrix:
         include:
           - name: macos-arm
-            os: macos-latest      # Apple Silicon (M-series) runner
+            os: macos-latest      # Apple Silicon (M-series) — currently macOS 15+
           - name: macos-intel
-            os: macos-13          # last Intel-based macOS runner GitHub offers
+            os: macos-15-intel    # last supported Intel image; retires ~Fall 2027
           - name: windows
             os: windows-latest
           - name: linux
