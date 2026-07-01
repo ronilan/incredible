@@ -223,6 +223,32 @@ jobs:
         with:
           path: artifacts
 
+      - name: Zip each artifact
+        shell: bash
+        run: |
+          mkdir -p release-assets
+          for dir in artifacts/*/; do
+            name=$(basename "$dir")
+            (cd "$dir" && zip -r "../../release-assets/${name}.zip" .)
+          done
+          ls -la release-assets
+
+      - name: Publish rolling release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest Build
+          prerelease: true
+          files: release-assets/*.zip
+    name: Publish to rolling "latest" release
+    needs: [build-terminal, build-macos-native, build-windows-native]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
       # Each artifact was uploaded as its own folder (e.g. "terminal-macos-arm",
       # "macos-native-macos-intel", "windows-native"). Zip each folder as-is
       # and name the zip after the folder — no renaming of what's inside.
