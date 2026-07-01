@@ -159,8 +159,11 @@ function transformMainRs(content) {
 }
 
 function transformPlatformRs(content) {
+    // Real Rust syntax is option_env!("APP_NAME").unwrap_or("...") — the
+    // parentheses around both the macro arg and unwrap_or arg must be part
+    // of the pattern, or this silently matches nothing.
     return content.replace(
-        /(option_env!"APP_NAME"\.unwrap_or")[^"]*(")/g,
+        /(option_env!\("APP_NAME"\)\.unwrap_or\(")[^"]*("\))/g,
         `$1${appName}$2`
     );
 }
@@ -186,7 +189,15 @@ function transformInfoPlist(content) {
 }
 
 function transformRun(content) {
-    return content.replace(/--bin\s+\w+(?![_])/g, `--bin ${name}`);
+    // Match any --bin token and preserve a known _macos/_windows suffix
+    // rather than relying on a lookahead, which can't tell "end of the
+    // base name" apart from "end of the suffix" when both are \w-chars.
+    return content.replace(/(--bin\s+)(\S+)/g, (match, prefix, token) => {
+        let suffix = '';
+        if (token.endsWith('_macos')) suffix = '_macos';
+        else if (token.endsWith('_windows')) suffix = '_windows';
+        return `${prefix}${name}${suffix}`;
+    });
 }
 
 function transformBuildMacos(content) {
@@ -216,22 +227,31 @@ function transformBuildTerminal(content) {
         /(run\('cargo build --release --bin\s+)[^']+('\))/,
         `$1${name}$2`
     );
+    // Whitespace/newline-tolerant: matches the ternary whether it's on one
+    // line or spread across multiple lines (as in the real build_terminal.js).
+    // Note: group 2 already contains the literal ".exe'" text, so it must
+    // NOT be prefixed with an extra ${name}.exe or "*.exe.exe" results.
     r = r.replace(
-        /(\? ')[^']+(\.exe' : ')[^']+(')/,
-        `$1${name}.exe$2${name}$3`
+        /(\?\s*')[^']+(\.exe'\s*:\s*')[^']+(')/,
+        `$1${name}$2${name}$3`
     );
     return r;
 }
 
 function transformBuildWindows(content) {
     let r = content;
+    // Anchor on the fixed "cargo build --release --bin " prefix inside the
+    // execSync string, not on the current binary name value.
     r = r.replace(
-        /(--bin\s+)\w+$([\s\S]*?incredible_template_windows)/m,
+        /('cargo build --release --bin\s+)[^']+(')/,
         `$1${name}_windows$2`
     );
+    // Anchor on the two preceding fixed path.join args
+    // ('target', 'release', ...), not on the current binary filename value.
+    // \s* tolerates the multi-line formatting used in the real file.
     r = r.replace(
-        /('incredible_template_windows\.exe')/,
-        `'${name}_windows.exe'`
+        /(path\.join\(\s*'target',\s*'release',\s*')[^']+(\.exe'\s*\))/,
+        `$1${name}_windows$2`
     );
     return r;
 }
