@@ -35,8 +35,11 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
 
-      - name: Setup Node
+      - name: Setup Pages & Node
         uses: actions/configure-pages@v5 
+
+      - name: Install wasm-pack
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Install dependencies
         run: pnpm install
