@@ -21,9 +21,13 @@ Icon
 
 # Rust
 Cargo.lock
+
 # Rust build artifacts
 /target
+
+# Local build artifacts
 /dist
+/docs
 
 # JavaScript / pnpm workspace
 **/node_modules
