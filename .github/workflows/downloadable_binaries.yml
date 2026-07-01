@@ -82,8 +82,17 @@ jobs:
   # Builds the macOS-native binary (incredible_macos, built with the
   # macos-native feature) and wraps it into a .app + .dmg via bundle.js.
   build-macos-native:
-    name: Build macOS Native
-    runs-on: macos-latest
+    name: Build macOS Native (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macos-arm
+            os: macos-latest      # Apple Silicon (M-series) — currently macOS 15+
+          - name: macos-intel
+            os: macos-15-intel    # last supported Intel image; retires ~Fall 2027
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -142,7 +151,7 @@ jobs:
       - name: Upload macOS native artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macos-native
+          name: macos-native-${{ matrix.name }}
           path: dist/*.dmg
 
   # Builds the Windows-native binary (incredible_windows). Output filename
