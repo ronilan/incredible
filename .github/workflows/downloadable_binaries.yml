@@ -1,0 +1,242 @@
+name: Create Downloadable Binaries
+
+# Builds native downloadable binaries.
+# Sibling to "Deploy to GitHub Pages" — that  builds the WASM/web version.
+on:
+  # Triggers the workflow on push events but only for the main branch
+  push:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+
+jobs:
+  # Builds the plain terminal binary (fixed name: "incredible") on all
+  # four target platforms. build_terminal.js has no --target flag, so
+  # this can only cross four OS *runners*, not cross-compile from one.
+  build-terminal:
+    name: Build Terminal Binary (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macos-arm
+            os: macos-latest      # Apple Silicon (M-series) — currently macOS 15+
+          - name: macos-intel
+            os: macos-15-intel    # last supported Intel image; retires ~Fall 2027
+          - name: windows
+            os: windows-latest
+          - name: linux
+            os: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # This repo depends on a PRIVATE repo (incredible-alpha) via Cargo.toml.
+      # Anonymous `git` over HTTPS can't clone private repos, so we rewrite every
+      # "https://github.com/" URL to embed a PAT as credentials before Cargo/git
+      # tries to fetch it. The token lives in repo secret INCREDIBLE_ALPHA
+      # (Settings > Secrets and variables > Actions). If this step is ever
+      # removed, the WASM build step below will fail with an auth/404-style
+      # error on the private dependency, not an obvious "auth failed" message.
+      - name: Configure Git for Private Dependency
+        run: |
+          git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # Runs `cargo build --release --bin incredible`, then copies the
+      # result into dist/incredible (dist/incredible.exe on Windows).
+      #
+      # CARGO_NET_GIT_FETCH_WITH_CLI tells Cargo to shell out to the system's
+      # `git` binary instead of using its built-in libgit2 fetcher. This matters
+      # because only the system git picks up the credential rewrite configured
+      # above (`git config --global url...insteadOf`) — libgit2 ignores it and
+      # will fail to fetch the private incredible-alpha dependency without this.
+      - name: Build terminal binary
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+        run: pnpm run build:terminal
+
+      - name: Upload terminal binary artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: terminal-${{ matrix.name }}
+          path: dist/
+
+  # Builds the macOS-native binary (incredible_macos, built with the
+  # macos-native feature) and wraps it into a .app + .dmg via bundle.js.
+  build-macos-native:
+    name: Build macOS Native (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macos-arm
+            os: macos-latest      # Apple Silicon (M-series) — currently macOS 15+
+          - name: macos-intel
+            os: macos-15-intel    # last supported Intel image; retires ~Fall 2027
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # This repo depends on a PRIVATE repo (incredible-alpha) via Cargo.toml.
+      # Anonymous `git` over HTTPS can't clone private repos, so we rewrite every
+      # "https://github.com/" URL to embed a PAT as credentials before Cargo/git
+      # tries to fetch it. The token lives in repo secret INCREDIBLE_ALPHA
+      # (Settings > Secrets and variables > Actions). If this step is ever
+      # removed, the WASM build step below will fail with an auth/404-style
+      # error on the private dependency, not an obvious "auth failed" message.
+      - name: Configure Git for Private Dependency
+        run: |
+          git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          cache: pnpm
+
+      # librsvg provides rsvg-convert, used by bundle.js to render the app
+      # icon at multiple sizes for the .icns file. sips/iconutil/hdiutil
+      # are built into macOS, no install needed.
+      - name: Install macOS bundling deps
+        run: brew install librsvg
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # cargo build --release --bin incredible_macos --features macos-native,
+      # then copies the result to dist/incredible_macos.
+      #
+      # CARGO_NET_GIT_FETCH_WITH_CLI tells Cargo to shell out to the system's
+      # `git` binary instead of using its built-in libgit2 fetcher. This matters
+      # because only the system git picks up the credential rewrite configured
+      # above (`git config --global url...insteadOf`) — libgit2 ignores it and
+      # will fail to fetch the private incredible-alpha dependency without this.
+      - name: Build macOS native binary
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+        run: pnpm run build:macos
+
+      # Wraps dist/incredible_macos into dist/<AppName>.app, using
+      # app_name/binary_name/icon_source from Cargo.toml's
+      # [package.metadata.bundle] and Info.plist at the repo root, then
+      # produces dist/<AppName>.dmg.
+      - name: Bundle macOS app
+        run: pnpm run bundle:macos
+
+      - name: Upload macOS native artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: macos-native-${{ matrix.name }}
+          path: dist/*.dmg
+
+  # Builds the Windows-native binary (incredible_windows). Output filename
+  # is dynamic — dist/<AppName>.exe, where <AppName> comes from Cargo.toml's
+  # [package.metadata.bundle] app_name — so the upload step globs for it
+  # instead of naming it exactly.
+  build-windows-native:
+    name: Build Windows Native
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # This repo depends on a PRIVATE repo (incredible-alpha) via Cargo.toml.
+      # Anonymous `git` over HTTPS can't clone private repos, so we rewrite every
+      # "https://github.com/" URL to embed a PAT as credentials before Cargo/git
+      # tries to fetch it. The token lives in repo secret INCREDIBLE_ALPHA
+      # (Settings > Secrets and variables > Actions). If this step is ever
+      # removed, the WASM build step below will fail with an auth/404-style
+      # error on the private dependency, not an obvious "auth failed" message.
+      - name: Configure Git for Private Dependency
+        run: |
+          git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # cargo build --release --bin incredible_windows --features windows-native,
+      # then copies the result to dist/incredible_windows.
+      #
+      # CARGO_NET_GIT_FETCH_WITH_CLI tells Cargo to shell out to the system's
+      # `git` binary instead of using its built-in libgit2 fetcher. This matters
+      # because only the system git picks up the credential rewrite configured
+      # above (`git config --global url...insteadOf`) — libgit2 ignores it and
+      # will fail to fetch the private incredible-alpha dependency without this.
+      - name: Build Windows native binary
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+        run: pnpm run build:windows
+
+      - name: Upload Windows native artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-native
+          path: dist/*.exe
+
+  publish-release:
+    name: Publish to rolling "latest" release
+    needs: [build-terminal, build-macos-native, build-windows-native]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Zip each artifact
+        shell: bash
+        run: |
+          mkdir -p release-assets
+          for dir in artifacts/*/; do
+            name=$(basename "$dir")
+            (cd "$dir" && zip -r "../../release-assets/${name}.zip" .)
+          done
+          ls -la release-assets
+
+      - name: Publish rolling release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest Build
+          prerelease: true
+          files: release-assets/*.zip
