@@ -67,7 +67,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # Runs the project's build:wasm script (defined in package.json), which
+      # Runs the project's pnpm run build:web script (defined in package.json), which
       # invokes wasm-pack/cargo to compile the Rust code to WASM.
       #
       # CARGO_NET_GIT_FETCH_WITH_CLI tells Cargo to shell out to the system's
@@ -78,7 +78,7 @@ jobs:
       - name: Build WASM assets
         env:
           CARGO_NET_GIT_FETCH_WITH_CLI: "true"
-        run: pnpm run build:wasm
+        run: pnpm run build:web
 
       # Packages the contents of the 'docs' folder (the build output directory
       # for this project) into an artifact that GitHub Pages can serve.
