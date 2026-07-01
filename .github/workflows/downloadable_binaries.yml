@@ -62,7 +62,15 @@ jobs:
 
       # Runs `cargo build --release --bin incredible`, then copies the
       # result into dist/incredible (dist/incredible.exe on Windows).
+      #
+      # CARGO_NET_GIT_FETCH_WITH_CLI tells Cargo to shell out to the system's
+      # `git` binary instead of using its built-in libgit2 fetcher. This matters
+      # because only the system git picks up the credential rewrite configured
+      # above (`git config --global url...insteadOf`) — libgit2 ignores it and
+      # will fail to fetch the private incredible-alpha dependency without this.
       - name: Build terminal binary
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
         run: pnpm run build:terminal
 
       - name: Upload terminal binary artifact
@@ -113,7 +121,15 @@ jobs:
 
       # cargo build --release --bin incredible_macos --features macos-native,
       # then copies the result to dist/incredible_macos.
+      #
+      # CARGO_NET_GIT_FETCH_WITH_CLI tells Cargo to shell out to the system's
+      # `git` binary instead of using its built-in libgit2 fetcher. This matters
+      # because only the system git picks up the credential rewrite configured
+      # above (`git config --global url...insteadOf`) — libgit2 ignores it and
+      # will fail to fetch the private incredible-alpha dependency without this.
       - name: Build macOS native binary
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
         run: pnpm run build:macos
 
       # Wraps dist/incredible_macos into dist/<AppName>.app, using
@@ -165,7 +181,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      # cargo build --release --bin incredible_windows --features windows-native,
+      # then copies the result to dist/incredible_windows.
+      #
+      # CARGO_NET_GIT_FETCH_WITH_CLI tells Cargo to shell out to the system's
+      # `git` binary instead of using its built-in libgit2 fetcher. This matters
+      # because only the system git picks up the credential rewrite configured
+      # above (`git config --global url...insteadOf`) — libgit2 ignores it and
+      # will fail to fetch the private incredible-alpha dependency without this.
       - name: Build Windows native binary
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
         run: pnpm run build:windows
 
       - name: Upload Windows native artifact
