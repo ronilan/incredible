@@ -35,13 +35,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # NOTE: uncomment if/when this app gains a private git dependency
-      # (e.g. via incredible-alpha or similar). Requires a repo secret
-      # named INCREDIBLE_ALPHA. Not needed currently — this app doesn't
-      # appear to depend on itself.
-      # - name: Configure Git for Private Dependency
-      #   run: |
-      #     git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
+      # This repo depends on a PRIVATE repo (incredible-alpha) via Cargo.toml.
+      # Anonymous `git` over HTTPS can't clone private repos, so we rewrite every
+      # "https://github.com/" URL to embed a PAT as credentials before Cargo/git
+      # tries to fetch it. The token lives in repo secret INCREDIBLE_ALPHA
+      # (Settings > Secrets and variables > Actions). If this step is ever
+      # removed, the WASM build step below will fail with an auth/404-style
+      # error on the private dependency, not an obvious "auth failed" message.
+      - name: Configure Git for Private Dependency
+        run: |
+          git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -76,6 +79,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      # This repo depends on a PRIVATE repo (incredible-alpha) via Cargo.toml.
+      # Anonymous `git` over HTTPS can't clone private repos, so we rewrite every
+      # "https://github.com/" URL to embed a PAT as credentials before Cargo/git
+      # tries to fetch it. The token lives in repo secret INCREDIBLE_ALPHA
+      # (Settings > Secrets and variables > Actions). If this step is ever
+      # removed, the WASM build step below will fail with an auth/404-style
+      # error on the private dependency, not an obvious "auth failed" message.
+      - name: Configure Git for Private Dependency
+        run: |
+          git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -125,6 +139,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      # This repo depends on a PRIVATE repo (incredible-alpha) via Cargo.toml.
+      # Anonymous `git` over HTTPS can't clone private repos, so we rewrite every
+      # "https://github.com/" URL to embed a PAT as credentials before Cargo/git
+      # tries to fetch it. The token lives in repo secret INCREDIBLE_ALPHA
+      # (Settings > Secrets and variables > Actions). If this step is ever
+      # removed, the WASM build step below will fail with an auth/404-style
+      # error on the private dependency, not an obvious "auth failed" message.
+      - name: Configure Git for Private Dependency
+        run: |
+          git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
