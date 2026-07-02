@@ -84,7 +84,7 @@ pub fn build() -> App<State> {
     let markdown = Markdown::default();
     markdown
         .markdown(MARKDOWN)
-        .wrap_at(50)
+        .wrap_at(72)
         .copy_combination(Some(KeyCombination::new(Key::Char('c'), &[KeyMod::Ctrl])))
         .select_all_combination(Some(KeyCombination::new(Key::Char('e'), &[KeyMod::Ctrl])));
 

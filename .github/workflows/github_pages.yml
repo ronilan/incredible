@@ -25,8 +25,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Private repos can't use GitHub Pages unless the org is on a paid plan
+  # (Pro/Team/Enterprise) or the repo is public. Rather than let
+  # configure-pages fail the deploy job outright with a 404/403 partway
+  # through the build, probe availability first in its own job so `deploy`
+  # can just be skipped cleanly via `needs`/`if` below.
+  check:
+    name: Check if Pages is available
+    runs-on: ubuntu-latest
+    outputs:
+      available: ${{ steps.pages_check.outcome == 'success' }}
+    steps:
+      - name: Check if Pages is available
+        id: pages_check
+        continue-on-error: true
+        uses: actions/configure-pages@v6
+        with:
+          enablement: true
+
+      - name: Skip notice
+        if: steps.pages_check.outcome == 'failure'
+        run: echo "::notice::GitHub Pages is not available for this repo (private repo without a paid plan, or Pages disabled). Skipping deploy."
+
   # Deployment job
   deploy:
+    needs: check
+    if: needs.check.outputs.available == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

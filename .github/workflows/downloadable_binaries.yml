@@ -7,13 +7,15 @@ on:
   push:
     branches:
       - main
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  # Runs automatically whenever a GitHub Release is published — builds and
+  # attaches binaries to that release.
+  release:
+    types: [published]
 
 permissions:
   contents: write
-
 
 jobs:
   # Builds the plain terminal binary (fixed name: "incredible") on all
@@ -214,7 +216,7 @@ jobs:
           path: dist/*.exe
 
   publish-release:
-    name: Publish to rolling "latest" release
+    name: Publish binaries
     needs: [build-terminal, build-macos-native, build-windows-native]
     runs-on: ubuntu-latest
     steps:
@@ -233,10 +235,15 @@ jobs:
           done
           ls -la release-assets
 
-      - name: Publish rolling release
+      # When triggered by an actual published Release, attach the zips to
+      # that release (versioned, permanent — no tag_name needed, the
+      # action attaches to the release that triggered the run). When
+      # triggered by push/workflow_dispatch, fall back to the rolling
+      # "latest" tag so there's always a stable link even between releases.
+      - name: Publish release assets
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: latest
-          name: Latest Build
-          prerelease: true
+          tag_name: ${{ github.event_name != 'release' && 'latest' || '' }}
+          name: ${{ github.event_name != 'release' && 'Latest Build' || '' }}
+          prerelease: ${{ github.event_name != 'release' }}
           files: release-assets/*.zip

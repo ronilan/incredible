@@ -6,5 +6,6 @@ fn main() {
 }
  ```
 
-Fabriqué au Canada : Made in Canada 🇨🇦 : July 2026
+---
 
+Fabriqué au Canada : Made in Canada 🇨🇦 : July 2026 : [GitHub](https://github.com/ronilan/incredible)
