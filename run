@@ -1,0 +1,41 @@
+#!/bin/bash
+# Example: ./run --terminal
+# Example: ./run --macos
+# Example: ./run --wasm
+
+PLATFORM=""
+ARGS=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --terminal) PLATFORM="terminal"; shift ;;
+        --macos) PLATFORM="macos"; shift ;;
+        --windows) PLATFORM="windows"; shift ;;
+        --wasm) PLATFORM="wasm"; shift ;;
+        *) ARGS="$@ "; break ;;
+    esac
+done
+
+if [ -z "$PLATFORM" ]; then
+    echo "Usage: ./run <--terminal|--macos|--wasm> [args...]"
+    exit 1
+fi
+
+case $PLATFORM in
+    terminal)
+        cargo run --bin incredible -- $ARGS
+        ;;
+    macos)
+        cargo run --bin incredible_macos --features macos-native -- $ARGS
+        ;;
+    windows)
+        cargo run --bin incredible_windows --features windows-native -- $ARGS
+        ;;
+    wasm)
+        pnpm run dev -- $ARGS
+        ;;
+    *)
+        echo "Invalid platform. Use: --terminal, --macos, --windows, or --wasm"
+        exit 1
+        ;;
+esac
