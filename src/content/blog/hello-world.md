@@ -63,7 +63,7 @@ This website is actually an Incredible app compiled to WASM.
 
 Creating the screen, reading a markdown file, laying out the text, coloring it, enabling the scroll, managing it, changing the mouse pointer over the scroll bar, responding to the drag on said scroll bar, underlining the links, coloring them when they are hovered, removing color when they are not, inverting them when they are clicked, loading the next markdown page, changing the browser URL hash, the keyboard shortcuts, Ctrl+e to select all, Ctrl+c to copy, this, that and all the rest - it's all coming from Incredible, not the browser.
 
-You are interacting with precompiled Rust, not JIT-compiled JavaScript. You can download the app as pre-built binaries for other platforms too, if you wish.
+You are interacting with precompiled Rust, not JIT-compiled JavaScript. You can download the app as [pre-built binaries for other platforms](https://github.com/ronilan/incredible/releases) too, if you wish.
 
 It works. It demonstrates. It illustrates (see the [code](https://github.com/ronilan/incredible/tree/main/src)). As such, I think this is a proper introduction.
 
