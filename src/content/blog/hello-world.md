@@ -6,6 +6,8 @@
 
 ◦ Hello 👋🏿 Bonjour 👋🏾 Привет 👋🏽 你好 👋🏼 안녕하세요 👋🏻 こんにちは 👋 नमस्ते ◦
 
+> **Incredible is a Rust Text User Interface (TUI) Framework for the 2nd Quarter of the 21st Century.**
+
 In our world of computer programming, the term *Hello World* refers to a small and simple program that prints the words "Hello, World" to a screen. This small and simple program is an introduction consisting of two parts: an illustration and a demonstration.
 
 ## Illustration
