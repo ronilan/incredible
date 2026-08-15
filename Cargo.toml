@@ -33,6 +33,18 @@ path = "src/macos.rs"
 name = "incredible_windows"
 path = "src/windows.rs"
 
+[[bin]]
+name = "config"
+path = "tools/config/main.rs"
+
+[[bin]]
+name = "run"
+path = "tools/run/main.rs"
+
+[[bin]]
+name = "package"
+path = "tools/package/main.rs"
+
 [features]
 default = []
 macos-native = [
@@ -50,7 +62,10 @@ incredible_elements = { git = "https://github.com/ronilan/incredible-alpha" }
 incredible_elements_extra = { git = "https://github.com/ronilan/incredible-alpha" }
 incredible_elements_text_fonts  = { git = "https://github.com/ronilan/incredible-alpha" }
 incredible_helpers_layout = { git = "https://github.com/ronilan/incredible-alpha" }
+incredible_helpers_styling = { git = "https://github.com/ronilan/incredible-alpha" }
 incredible_helpers_effects = { git = "https://github.com/ronilan/incredible-alpha" }
+serde_json = "1"
+resvg = "0.43"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = "0.2"

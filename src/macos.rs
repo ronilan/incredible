@@ -1,9 +1,11 @@
 #[cfg(all(target_os = "macos", feature = "macos-native"))]
-mod app;
-#[cfg(all(target_os = "macos", feature = "macos-native"))]
 mod platform;
 #[cfg(all(target_os = "macos", feature = "macos-native"))]
 mod runtime;
+#[cfg(all(target_os = "macos", feature = "macos-native"))]
+mod state;
+#[cfg(all(target_os = "macos", feature = "macos-native"))]
+mod ui;
 
 #[cfg(all(target_os = "macos", feature = "macos-native"))]
 fn main() {

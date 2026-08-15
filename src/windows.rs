@@ -1,11 +1,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 #[cfg(all(target_os = "windows", feature = "windows-native"))]
-mod app;
-#[cfg(all(target_os = "windows", feature = "windows-native"))]
 mod platform;
 #[cfg(all(target_os = "windows", feature = "windows-native"))]
 mod runtime;
+#[cfg(all(target_os = "windows", feature = "windows-native"))]
+mod state;
+#[cfg(all(target_os = "windows", feature = "windows-native"))]
+mod ui;
 
 #[cfg(all(target_os = "windows", feature = "windows-native"))]
 fn main() {
