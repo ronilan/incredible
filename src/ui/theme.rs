@@ -51,6 +51,11 @@ pub fn build_theme() {
     });
 
     // TODO: explicit style handle for internal needed to negate need for override.
+    theme_rule::<Style>("ScrollArea Markdown HorizontalLine", |s| {
+        s.base.decor.faint.set(Some(true));
+        s.dragged.decor.faint.set(Some(true));
+    });
+
     theme_rule::<HorizontalLineStyle>("ScrollArea Markdown HorizontalLine", |s| {
         s.base.kind.set(Some(HorizontalLineKind::Dotted));
         s.hovered.kind.set(Some(HorizontalLineKind::Dotted));

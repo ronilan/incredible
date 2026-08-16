@@ -37,35 +37,15 @@ function syncViewportBounds(): void {
 
   meta.setAttribute(
     'content',
-    `width=device-width, initial-scale=${scale}, minimum-scale=${scale}, maximum-scale=${scale}, user-scalable=no`
+    `width=device-width, initial-scale=${scale}, minimum-scale=${scale}, maximum-scale=5.0, user-scalable=yes`
   );
 }
-
-/**
- * Some WASM event handlers call `preventDefault()` on synthetic or emulated
- * events (e.g. touch gestures that fire mouse events). The browser marks these
- * as `cancelable: false`, causing `preventDefault()` to throw. This patch
- * silently skips the call when the event is not cancelable.
- */
-function patchWasmCancelableInterventions() {
-    const originalPreventDefault = Event.prototype.preventDefault;
-
-    Event.prototype.preventDefault = function() {
-      if (this.cancelable === false) {
-        return;
-      }
-
-      return originalPreventDefault.call(this);
-    };
-  }
 
 await init();
 
 // Attach listeners for orientation flips and window adjustments
 window.addEventListener('resize', syncViewportBounds);
 window.addEventListener('orientationchange', syncViewportBounds);
-
-patchWasmCancelableInterventions();
 
 main();
 
