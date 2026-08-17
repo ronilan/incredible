@@ -1,14 +1,26 @@
 use incredible::*;
-use incredible_elements_text_fonts::{BlockCharsStr, BlockKind};
+use incredible_elements_text_fonts::{BlockCharsStr, BlockKind, BlockSize};
 use incredible_helpers_effects::*;
 
 use crate::state::State;
 
-pub fn build_logo() -> BlockCharsStr<State> {
+pub fn build_logo(width: usize) -> BlockCharsStr<State> {
     let logo: BlockCharsStr<State> = BlockCharsStr::default();
+    let size = if width >= 80 {
+        BlockSize::Big
+    } else {
+        BlockSize::Small
+    };
+    let kind = if width >= 80 {
+        BlockKind::Shadow
+    } else {
+        BlockKind::Plain
+    };
+
     logo.handle("logo")
         .text("Incredible")
-        .kind(BlockKind::Shadow)
+        .kind(kind)
+        .size(size)
         .style_handle("GradientLabel")
         .animation(Some(Animation::new(2000.0, 8.0, 1.0)));
 
