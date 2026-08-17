@@ -9,7 +9,6 @@ title = "Incredible :: A Modern Rust TUI Framework"
 description = "A Rust TUI Framework for the 2nd Quarter of the 21st Century (Experimental, Modular, Declarative, Reactive, Event Driven)"
 keywords = "tui, cli, terminal, rust, wasm"
 cname = "www.incredible.rs"
-mobile-min-width = 80
 
 [package.metadata.bundle]
 app_name = "Incredible"
