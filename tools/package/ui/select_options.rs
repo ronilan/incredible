@@ -1,13 +1,11 @@
 use incredible::*;
-use incredible_elements::{ScrollArea, Select, SelectOptions, Selectable, SelectableItem};
+use incredible_elements::{ScrollArea, Select, Selectable, SelectableItem};
 
 use crate::state::{PackageTarget, State};
 
 pub fn build_select_options() -> Select<State> {
-    let select = Select::<State>::new(SelectOptions {
-        multi: true,
-        ..Default::default()
-    });
+    let select = Select::<State>::default();
+    select.multi(true);
 
     select
         .x(34)

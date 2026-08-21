@@ -1,5 +1,5 @@
 use incredible::*;
-use incredible_elements::{Select, SelectOptions};
+use incredible_elements::Select;
 
 use crate::{
     platform::{is_macos, is_windows},
@@ -7,10 +7,7 @@ use crate::{
 };
 
 pub fn build_select_target() -> Select<State> {
-    let select = Select::<State>::new(SelectOptions {
-        allow_unselect: true,
-        ..Default::default()
-    });
+    let select = Select::<State>::default();
     select
         .x(1)
         .y(1)

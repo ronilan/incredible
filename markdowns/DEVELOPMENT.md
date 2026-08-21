@@ -43,3 +43,25 @@ Two workflows in `.github/workflows/` build and distribute for you on GitHub's s
 - **Deploy to GitHub Pages** — builds the WASM/web version and deploys it as a static site, automatically on every push to `main` (or manually).
 
 > Note: the workflows require an `INCREDIBLE_ALPHA` secret (a GitHub token with read access to the private crate) under Settings > Secrets and variables > Actions.
+
+### Workflows vs. package tool
+
+Some, but not all, of what the **Create Downloadable Binaries** workflow does can also be done locally with the **Package tool**. `./package` builds and bundles the same targets for the platform you are running on, and `./package --publish` attaches the release assets to a GitHub Release. Note that the package tool builds only the platform it runs on, whereas GitHub Actions build the binaries for all platforms on separate runners in parallel.
+
+## Download & with Docker
+
+Build the Docker image:
+
+```bash
+docker build -t incredible .
+```
+
+Run the container:
+
+```bash
+docker run -it incredible
+```
+
+This downloads the latest release binary from GitHub and runs it inside the container.
+
+---
