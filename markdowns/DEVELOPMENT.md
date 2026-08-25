@@ -48,7 +48,7 @@ Two workflows in `.github/workflows/` build and distribute for you on GitHub's s
 
 Some, but not all, of what the **Create Downloadable Binaries** workflow does can also be done locally with the **Package tool**. `./package` builds and bundles the same targets for the platform you are running on, and `./package --publish` attaches the release assets to a GitHub Release. Note that the package tool builds only the platform it runs on, whereas GitHub Actions build the binaries for all platforms on separate runners in parallel.
 
-## Download & with Docker
+## Download & Run with Docker
 
 Build the Docker image:
 
