@@ -48,3 +48,7 @@ This document outlines the system requirements and installation steps needed to 
    cargo install wasm-pack
    ```
 4. **Install Visual Studio Build Tools** - Download from [visualstudio.microsoft.com](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022). In the installer, select the **"Desktop development with C++"** workload. This is required to compile the `sharp` native image module and provides the Windows SDK.
+
+---
+
+[Home](./index.md) | [Markdowns](./markdowns/index.md)

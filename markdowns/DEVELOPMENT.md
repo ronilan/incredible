@@ -1,6 +1,6 @@
 ## Development
 
-This project builds and packages for four platforms from a single codebase: **Terminal** (native binary), **Web** (WASM on GitHub Pages), **macOS** (native GUI), and **Windows** (native GUI). Make sure you meet the [development prerequisites](./DEVELOPMENT_PREREQUISITES.md) first.
+This project builds and packages for four platforms from a single codebase: **Terminal** (native binary), **Web** (WASM on GitHub Pages), **macOS** (native GUI), and **Windows** (native GUI). Make sure you meet the [development prerequisites](./markdowns/DEVELOPMENT_PREREQUISITES.md) first.
 
 **Build the tools** (from the repo root):
 
@@ -65,3 +65,5 @@ docker run -it incredible
 This downloads the latest release binary from GitHub and runs it inside the container.
 
 ---
+
+[Home](./index.md) | [Markdowns](./markdowns/index.md)

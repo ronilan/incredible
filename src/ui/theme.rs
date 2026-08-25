@@ -9,19 +9,25 @@ pub fn build_theme() {
         s.hovered.pointer.set(Some(PointerShape::Text));
     });
 
-    theme_rule::<Style>("MarkdownHeading", |s| {
+    theme_rule::<Style>("Markdown::MarkdownHeading1", |s| {
+        s.base.decor.color.set(Some(Color::from(12)));
+    });
+    theme_rule::<Style>("Markdown::MarkdownHeading2", |s| {
         s.base.decor.color.set(Some(Color::from(13)));
     });
+    theme_rule::<Style>("Markdown::MarkdownHeading3", |s| {
+        s.base.decor.color.set(Some(Color::from(14)));
+    });
 
-    theme_rule::<Style>("Link", |s| {
+    theme_rule::<Style>("MarkdownParagraph::Link", |s| {
         s.base.decor.underline.set(Some(UnderlineKind::Dotted));
         s.hovered.decor.color.set(Some(Color::from(11)));
         s.hovered.pointer.set(Some(PointerShape::Pointer));
     });
 
-    theme_rule::<Style>("MarkdownRelativeLink", |s| {
+    theme_rule::<Style>("MarkdownParagraph::MarkdownRelativeLink", |s| {
         s.base.decor.underline.set(Some(UnderlineKind::Single));
-        s.hovered.decor.color.set(Some(Color::from(12)));
+        s.hovered.decor.color.set(Some(Color::from(10)));
         s.hovered.pointer.set(Some(PointerShape::Pointer));
     });
 
@@ -50,11 +56,11 @@ pub fn build_theme() {
         s.hovered.kind.set(Some(HorizontalLineKind::Thick));
     });
 
-    theme_rule::<Style>("ScrollArea Markdown HorizontalLine", |s| {
+    theme_rule::<Style>("MarkdownRule::HorizontalLine", |s| {
         s.base.decor.faint.set(Some(true));
     });
 
-    theme_rule::<HorizontalLineStyle>("ScrollArea Markdown HorizontalLine", |s| {
+    theme_rule::<HorizontalLineStyle>("MarkdownRule::HorizontalLine", |s| {
         s.base.kind.set(Some(HorizontalLineKind::Dotted));
     });
 
