@@ -49,6 +49,7 @@ pub fn build_select_target() -> Select<State> {
                 } else {
                     state.selected_target = None;
                 }
+                el.focused(true);
             }
         });
 
