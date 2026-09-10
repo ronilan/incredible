@@ -5,8 +5,8 @@ use incredible_helpers_layout::*;
 use crate::state::State;
 
 pub fn build_scroll_window() -> ScrollArea<State> {
-    let scroll_window: ScrollArea<State> = ScrollArea::scrollbars_unframed();
-    scroll_window.clip_padding(ClipPadding::new(0, 1, 1, 0));
+    let scroll_window: ScrollArea<State> = ScrollArea::default();
+    scroll_window.conf_scrollbars_unframed().clip_padding(ClipPadding::new(0, 1, 1, 0));
 
     scroll_window.on_window(|el, _state, event| {
         if event.window == Window::Resize {

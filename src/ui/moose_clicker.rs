@@ -13,7 +13,7 @@ pub fn build_moose_clicker() -> Text<State> {
                 state.clicks += 1;
             }
         })
-        .on_state(|el, state| {
+        .on_state(|el, state, _event| {
             el.text(&format!("🫎: {}", state.clicks));
             el.draw();
         });

@@ -36,7 +36,7 @@ moose_clicker
             state.clicks += 1;
         }
     })
-    .on_state(|el, state| {
+    .on_state(|el, state, _event| {
         el.text(&format!("🫎: {}", state.clicks));
         el.draw();
     });
