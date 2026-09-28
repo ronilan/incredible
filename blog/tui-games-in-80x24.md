@@ -9,14 +9,14 @@
 ## TUI vs. Retro
 It is common to think about Text User Interfaces (i.e. TUIs) as “retro”. Thus, when TUI games come to mind, it is common to equate them with retro games. Think Tetris, Doom or Pac-Man. However, while retro games were played “in the terminal” and were limited in their graphic capabilities compared to modern ones, they were not TUI games.
 
-Retro 2D games operate on pixels. [The arcade version of Pac-Man](https://tralvex.com/download/forum/The%20Pac-Man%20Dossier.pdf), for example, ran at 224x288 pixels. The display was divided into 28×36 tiles, where each individual tile was 8×8 pixels. To draw a ghost, one needs 64 pixels. Modern fantasy consoles like PICO-8, which recreate the “retro feel”, use a 128x128 pixel display, with sprites again going for the 8x8 format. That’s not a lot of pixels, but it is enough. The [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird#/media/File:Flappy_Bird_icon.png) from the classic iPhone game fits into 17x12 pixels.
+Retro 2D games operate on pixels. [The arcade version of Pac-Man](https://tralvex.com/download/forum/The%20Pac-Man%20Dossier.pdf), for example, ran at 224x288 pixels. The display was divided into 28×36 tiles, where each individual tile was 8×8 pixels. To draw a ghost, one needs 64 pixels. Modern fantasy consoles like [PICO-8](https://www.lexaloffle.com/pico-8.php), which recreate the “retro feel”, use a 128x128 pixel display, with sprites again going for the 8x8 format. That’s not a lot of pixels, but it is enough. The [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird#/media/File:Flappy_Bird_icon.png) from the classic iPhone game fits into 17x12 pixels.
 
 ## Characters, not Pixels
 TUIs don’t work with pixels; they work with characters. There aren’t many of those, and they are rectangular in shape. The historic default screen of the terminal is 80 columns by 24 rows. A Flappy Bird where every char is used as a pixel will occupy half the screen height.
 
 24x80 is smaller and more limited than the arcade version of Pac-Man; even drawing a pixel-based ghost would be impossible. However, with the TUI being character-based, the Pac-Dots could be expressed as a Unicode dot ● and the ghost can be expressed with a ghost emoji 👻. Good. Well, maybe. That emoji would occupy 2 columns, not one. This would force the corridors to also be 2 characters wide. That dot will not be centered in the vertical ones; we’ll have to use an emoji here too ⚪. The emojis would look like a ghost and a dot, well, most of the time, but not always. Even when they do, they will look different between platforms. macOS ghost is not Windows ghost. The emojis would sit in what, depending on the user-defined font, is most of the time almost a square, but not always. The rows would fill the screen, most of the time, unless the user font again causes a gap, or the terminal they use, or this or that, etc. etc.
 
-Unstable, limited, dependent on user settings—why even bother?
+Unstable, limited, dependent on user settings - why even bother?
 
 ## Games as Testing
 Well, as it turns out, games are a great way to do end-to-end testing on a TUI framework. A TUI-based Pac-Man has not been implemented (yet), but three other games that are part of Incredible’s alpha testing have been released and open sourced (CC BY-NC-ND 4.0). They all fit into that strict 80x24 format.
