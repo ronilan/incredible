@@ -33,7 +33,7 @@ macro_rules! markdown_load {
 
 pub fn build_loader() -> MarkdownLoader<State> {
     let loader = MarkdownLoader::<State>::new();
-    loader.initial_path("./index.md").keep_app_title_for(&["./index.md"]);
+    loader.initial_path("./index.md").register_title("./index.md", "Incredible. A Modern Rust TUI Framework");
 
     markdown_load!(
         loader,

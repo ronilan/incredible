@@ -655,7 +655,7 @@ dependencies = [
 [[package]]
 name = "incredible"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "futures",
  "unicode-segmentation",
@@ -665,7 +665,7 @@ dependencies = [
 [[package]]
 name = "incredible_clipboard_browser"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "wasm-bindgen",
@@ -676,7 +676,7 @@ dependencies = [
 [[package]]
 name = "incredible_clipboard_macos"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "incredible_window_macos",
@@ -685,7 +685,7 @@ dependencies = [
 [[package]]
 name = "incredible_clipboard_terminal"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "libc",
@@ -694,7 +694,7 @@ dependencies = [
 [[package]]
 name = "incredible_clipboard_windows"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "incredible_window_windows",
@@ -703,7 +703,7 @@ dependencies = [
 [[package]]
 name = "incredible_dev_tools"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "wasm-bindgen",
  "web-sys",
@@ -712,7 +712,7 @@ dependencies = [
 [[package]]
 name = "incredible_elements"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "incredible_clipboard_browser",
@@ -746,7 +746,7 @@ dependencies = [
 [[package]]
 name = "incredible_elements_extra"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "image",
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
@@ -783,7 +783,7 @@ dependencies = [
 [[package]]
 name = "incredible_elements_text_fonts"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "incredible_helpers_effects",
@@ -795,7 +795,7 @@ dependencies = [
 [[package]]
 name = "incredible_event_loop_browser"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "js-sys",
@@ -806,7 +806,7 @@ dependencies = [
 [[package]]
 name = "incredible_event_loop_macos"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "futures",
  "futures-core",
@@ -819,7 +819,7 @@ dependencies = [
 [[package]]
 name = "incredible_event_loop_terminal"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "futures",
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
@@ -828,7 +828,7 @@ dependencies = [
 [[package]]
 name = "incredible_event_loop_windows"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "futures",
  "futures-core",
@@ -839,7 +839,7 @@ dependencies = [
 [[package]]
 name = "incredible_helpers_effects"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "incredible_helpers_layout",
@@ -848,7 +848,7 @@ dependencies = [
 [[package]]
 name = "incredible_helpers_layout"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
 ]
@@ -856,7 +856,7 @@ dependencies = [
 [[package]]
 name = "incredible_helpers_styling"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
 ]
@@ -864,7 +864,7 @@ dependencies = [
 [[package]]
 name = "incredible_input_browser"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "wasm-bindgen",
@@ -874,7 +874,7 @@ dependencies = [
 [[package]]
 name = "incredible_input_macos"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "futures",
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
@@ -887,7 +887,7 @@ dependencies = [
 [[package]]
 name = "incredible_input_terminal_nix"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "futures",
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
@@ -897,7 +897,7 @@ dependencies = [
 [[package]]
 name = "incredible_input_terminal_windows"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "futures",
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
@@ -907,7 +907,7 @@ dependencies = [
 [[package]]
 name = "incredible_input_windows"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "futures",
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
@@ -918,7 +918,7 @@ dependencies = [
 [[package]]
 name = "incredible_macros_decl"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible_macros_proc",
 ]
@@ -926,7 +926,7 @@ dependencies = [
 [[package]]
 name = "incredible_macros_proc"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -936,7 +936,7 @@ dependencies = [
 [[package]]
 name = "incredible_output_html"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "console_error_panic_hook",
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
@@ -949,7 +949,7 @@ dependencies = [
 [[package]]
 name = "incredible_output_macos"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "incredible_window_macos",
@@ -961,7 +961,7 @@ dependencies = [
 [[package]]
 name = "incredible_output_terminal"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "libc",
@@ -974,7 +974,7 @@ dependencies = [
 [[package]]
 name = "incredible_output_windows"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "incredible_window_windows",
@@ -984,7 +984,7 @@ dependencies = [
 [[package]]
 name = "incredible_window_macos"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "core-foundation",
  "core-graphics",
@@ -1002,7 +1002,7 @@ dependencies = [
 [[package]]
 name = "incredible_window_windows"
 version = "0.1.0"
-source = "git+https://github.com/ronilan/incredible-alpha#0d6a2720f7c16528a0ea7fa096d2d85e5603e56f"
+source = "git+https://github.com/ronilan/incredible-alpha#eb778a386bfeecbb99ea4044dbb99babcba97512"
 dependencies = [
  "incredible 0.1.0 (git+https://github.com/ronilan/incredible-alpha)",
  "windows",
