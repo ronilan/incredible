@@ -43,7 +43,7 @@ function syncViewportBounds() {
 
 await init();
 
-// Attach listeners for orientation flips and window adjustments
+// Track flips and window adjustments.
 window.addEventListener('resize', syncViewportBounds);
 window.addEventListener('orientationchange', syncViewportBounds);
 

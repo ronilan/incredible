@@ -13,7 +13,7 @@ Incredible is **New**, **Experimental**, **Modular**, **Declarative**, **Event D
 
 The framework is built from the ground up following basic UI principles. It implements an event loop, a typed element tree structure and a declarative theming engine. It allows the composition of new elements from encapsulated and/or fully reusable sub elements. It provides out of the box support for most modern terminal capabilities.
 
-Read [Hello world](./blog/hello-world.md).
+Read the [Blog](./blog/index.md).
 
 ## Status
 
