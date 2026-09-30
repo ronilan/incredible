@@ -2,7 +2,7 @@
 
 ---
 
-# Listen to ~~your Users~~ the Redditors
+# Listen to ~~your users~~ the Redditors
 
 A few days back I wrote a blog post and then posted it to [Reddit](https://www.reddit.com/r/programming/comments/1wspai2/tui_games_in_80x24/) and [Hacker News](https://news.ycombinator.com/item?id=49897427). The post was about TUI game development with Incredible. The comments were about the scroll. The website scroll. People (and bots) were not happy.
 
