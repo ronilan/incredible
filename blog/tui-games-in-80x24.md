@@ -1,4 +1,4 @@
-[Home](./index.md) | [Blog](./blog/index.md)
+[Home](./wasm.md) | [Blog](./blog/index.md)
 
 ---
 
@@ -52,4 +52,4 @@ September 27, 2026
 
 ---
 
-[Home](./index.md) | [Blog](./blog/index.md)
+[Home](./wasm.md) | [Blog](./blog/index.md)

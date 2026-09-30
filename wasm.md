@@ -24,6 +24,6 @@ Incredible is currently in **private alpha**.
 
 ---
 
-[Blog](./blog/index.md) | [.md](./markdowns/index.md) | [GitHub](https://github.com/ronilan/incredible) | [WASM](./wasm.html)
+[Blog](./blog/index.md) | [.md](./markdowns/index.md) | [GitHub](https://github.com/ronilan/incredible) | [HTML](https://www.incredible.rs/) 
 
 *Fabriqué au Canada : Made in Canada 🇨🇦 : August 2026*

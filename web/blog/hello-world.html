@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!-- GENERATED from blog/hello-world.md by the package tool (static_site). Do not edit; edit the markdown instead. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hello World</title>
+<meta name="version" content="0.1.0" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="stylesheet" href="../style.css" />
+</head>
+<body class="static">
+<div id="terminal" class="static">
+<main class="static-doc">
+<p><a class="rel" href="../index.html">Home</a> | <a class="rel" href="index.html">Blog</a></p>
+<div class="rule">················································································</div>
+<h1>Hello World</h1>
+<p>◦ Hello <span class="wc">👋🏿</span> Bonjour <span class="wc">👋🏾</span> Привет <span class="wc">👋🏽</span> <span class="wc">你</span><span class="wc">好</span> <span class="wc">👋🏼</span> <span class="wc">안</span><span class="wc">녕</span><span class="wc">하</span><span class="wc">세</span><span class="wc">요</span> <span class="wc">👋🏻</span> <span class="wc">こ</span><span class="wc">ん</span><span class="wc">に</span><span class="wc">ち</span><span class="wc">は</span> <span class="wc">👋</span> नम<span class="wc">स्ते</span> ◦</p>
+<blockquote><p><span class="b">Incredible is a Rust Text User Interface (TUI) Framework for the 2nd Quarter of the 21st Century.</span></p></blockquote>
+<p>In our world of computer programming, the term <em>Hello World</em> refers to a small and simple program that prints the words "Hello, World" to a screen. This small and simple program is an introduction consisting of two parts: an illustration and a demonstration.</p>
+<h2>Illustration</h2>
+<p>For a programming language, a small <em>Hello World</em> illustrates the syntax. For libraries and frameworks, it is usually used to illustrate the shape of the API. As such, it doesn't have to be limited to printing "Hello, World". As long as it succinctly illustrates some core ideas, that is OK.</p>
+<p>Here is a <em>Hello World</em> for Incredible.</p>
+<p>It takes the form of a <em>Moose Clicker</em>, a small Rust program that prints a moose emoji to the screen. When the moose emoji is clicked with the mouse, a counter is incremented.</p>
+<pre><code class="language-rust"><span style="color:#d7afff">use</span> incredible::*;
+<span style="color:#d7afff">use</span> incredible_elements::{<span style="color:#ffd75f">App</span>, <span style="color:#ffd75f">Text</span>};
+
+#[<span style="color:#00afff">derive</span>(<span style="color:#ffd75f">Clone</span>, <span style="color:#ffd75f">PartialEq</span>, <span style="color:#ffd75f">Debug</span>, <span style="color:#ffd75f">Default</span>)]
+<span style="color:#d7afff">pub</span> <span style="color:#d7afff">struct</span> <span style="color:#ffd75f">State</span> {
+    clicks: usize,
+}
+
+<span style="color:#d7afff">let</span> app = <span style="color:#ffd75f">App</span>::<span style="color:#00afff">default</span>();
+
+<span style="color:#d7afff">let</span> moose_clicker: <span style="color:#ffd75f">Text</span>&lt;<span style="color:#ffd75f">State</span>&gt; = <span style="color:#ffd75f">Text</span>::<span style="color:#00afff">default</span>();
+moose_clicker
+    .<span style="color:#00afff">on_mouse</span>(|_el, state, event| {
+        <span style="color:#d7afff">if</span> event.mouse == <span style="color:#ffd75f">Mouse</span>::<span style="color:#ffd75f">Click</span> {
+            state.clicks += <span style="color:#ffd75f">1</span>;
+        }
+    })
+    .<span style="color:#00afff">on_state</span>(|el, state, _event| {
+        el.<span style="color:#00afff">text</span>(&amp;<span style="color:#00afff">format!</span>(<span style="color:#87ff87">"<span class="wc">🫎</span>: {}"</span>, state.clicks));
+        el.<span style="color:#00afff">draw</span>();
+    });
+
+app.<span style="color:#00afff">add</span>(moose_clicker);
+
+app.<span style="color:#00afff">run</span>(<span style="color:#ffd75f">State</span>::<span style="color:#00afff">default</span>());</code></pre>
+<h2>Demonstration</h2>
+<p>When a <em>Hello World</em> program runs, it demonstrates that the language, the library, or the framework works in the greater context of the system for which it is designed. It is as if the program has come to life and is greeting the world around it.</p>
+<p>Here is the moose clicker running. Try it out. It works. It counts.</p>
+<p class="moose"><span class="wc">🫎</span>: 0</p>
+<h2>More</h2>
+<p>While something resembling the <em>Moose Clicker</em> is the common type of introduction, it feels lacking. We can do better. Actually, much better. This website as a whole is a much improved <em>Hello World</em> for the framework. This is because this is not a typical website. It is not made out of HTML, CSS, and JavaScript. It does not rely on the browser to provide layout, styling, and interaction.</p>
+<p>This website is actually an Incredible app compiled to WASM.</p>
+<p>Creating the screen, reading a markdown file, laying out the text, coloring it, enabling the scroll, managing it, changing the mouse pointer over the scroll bar, responding to the drag on said scroll bar, underlining the links, coloring them when they are hovered, removing color when they are not, inverting them when they are clicked, loading the next markdown page, changing the browser URL hash, the keyboard shortcuts, Ctrl+e to select all, Ctrl+c to copy, this, that and all the rest - it's all coming from Incredible, not the browser.</p>
+<p>You are interacting with precompiled Rust, not JIT-compiled JavaScript. You can download the app as <a class="ext" target="_blank" rel="noopener" href="https://github.com/ronilan/incredible/releases">pre-built binaries for other platforms</a> too, if you wish.</p>
+<p>It works. It demonstrates. It illustrates (see the <a class="ext" target="_blank" rel="noopener" href="https://github.com/ronilan/incredible/tree/main/src">code</a>). As such, I think this is a proper introduction.</p>
+<p>Will iter back,<br />
+Ron</p>
+<p><em>August 15, 2026</em></p>
+<div class="rule">················································································</div>
+<p><a class="rel" href="../index.html">Home</a> | <a class="rel" href="index.html">Blog</a></p>
+</main>
+</div>
+</body>
+</html>

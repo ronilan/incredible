@@ -3,6 +3,7 @@ pub enum PackageTarget {
     All,
     Terminal,
     Wasm,
+    Static,
     MacOs,
     Windows,
 }
@@ -13,6 +14,7 @@ impl PackageTarget {
             "all" | "a" => Some(Self::All),
             "terminal" | "t" => Some(Self::Terminal),
             "wasm" | "web" | "w" => Some(Self::Wasm),
+            "static" | "s" => Some(Self::Static),
             "macos" | "mac" | "m" => {
                 if cfg!(target_os = "macos") {
                     Some(Self::MacOs)

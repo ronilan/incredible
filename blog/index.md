@@ -1,6 +1,15 @@
-[Home](./index.md) > Blog
+[Home](./wasm.md) > Blog
 
 # Recent Posts
+
+## Listen to your ~~Users~~ the Redditors
+*September 29, 2026*
+
+A few days back I wrote a blog post and then posted it to Reddit and Hacker News. The post was about TUI game development with Incredible. The comments were about the scroll. The website scroll. People (and bots) were not happy.
+
+[Continue Reading ...](./blog/listen-to-the-redditors.md)
+
+---
 
 ## TUI Games in 80x24  
 *September 27, 2026*
@@ -8,6 +17,8 @@
 It is common to think about Text User Interfaces (i.e TUIs) as “retro”. Thus, when TUI games come to mind it is common to equate them with retro games.
 
 [Continue Reading ...](./blog/tui-games-in-80x24.md)
+
+---
 
 ## Hello World 
 *August 15, 2026*
@@ -20,4 +31,4 @@ In our world of computer programming, the term *Hello World* refers to a small a
 
 ---
 
-[Home](./index.md) > Blog
+[Home](./wasm.md) > Blog

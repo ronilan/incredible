@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!-- GENERATED from markdowns/DEVELOPMENT.md by the package tool (static_site). Do not edit; edit the markdown instead. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Development</title>
+<meta name="version" content="0.1.0" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="stylesheet" href="../style.css" />
+</head>
+<body class="static">
+<div id="terminal" class="static">
+<main class="static-doc">
+<h2>Development</h2>
+<p>This project builds and packages for four platforms from a single codebase: <span class="b">Terminal</span> (native binary), <span class="b">Web</span> (WASM on GitHub Pages), <span class="b">macOS</span> (native GUI), and <span class="b">Windows</span> (native GUI). Make sure you meet the <a class="rel" href="DEVELOPMENT_PREREQUISITES.html">development prerequisites</a> first.</p>
+<p><span class="b">Build the tools</span> (from the repo root):</p>
+<p>Build all three tools (config, package, run):</p>
+<pre><code class="language-bash">cargo build-tools</code></pre>
+<p>Then copy the freshly built binaries to the project root:</p>
+<p><span class="b">macOS:</span></p>
+<pre><code class="language-bash">cp target/release/config target/release/package target/release/run .
+chmod +x config package run</code></pre>
+<p><span class="b">Windows (PowerShell):</span></p>
+<pre><code class="language-powershell">copy target\release\config.exe .
+copy target\release\package.exe .
+copy target\release\run.exe .</code></pre>
+<p>The tools are then executed from the project root (<code>./config</code>, <code>./package</code>, <code>./run</code> on macOS; <code>config.exe</code>, <code>package.exe</code>, <code>run.exe</code> on Windows).</p>
+<p><span class="b">Configure the app:</span></p>
+<pre><code class="language-bash">./config</code></pre>
+<p>Sets up the app (name, icon, etc.). Can be re-run at any time to change values. App code lives in <code>src/</code> — edit <code>app.rs</code> and <code>platform.rs</code>.</p>
+<p><span class="b">Run / develop:</span></p>
+<pre><code class="language-bash">./run</code></pre>
+<p>Launches an interactive menu to build and run for a chosen platform (Terminal, Web/WASM, macOS, or Windows).</p>
+<p><span class="b">Package &amp; publish:</span></p>
+<pre><code class="language-bash">./package</code></pre>
+<p>Opens the interactive menu to bundle (and optionally publish) the app for your chosen targets.</p>
+<p><span class="b">Publish with GitHub Actions:</span></p>
+<p>Two workflows in <code>.github/workflows/</code> build and distribute for you on GitHub's servers:</p>
+<ul><li><span class="b">Create Downloadable Binaries</span> — builds the Terminal binary for all four platforms (macOS ARM, macOS Intel, Windows, Linux) plus the macOS and Windows native apps, and attaches them as <code>.zip</code> assets to a GitHub Release (or a rolling <code>latest</code> tag on manual runs).</li><li><span class="b">Deploy to GitHub Pages</span> — builds the WASM/web version and deploys it as a static site, automatically on every push to <code>main</code> (or manually).</li></ul>
+<blockquote><p>Note: the workflows require an <code>INCREDIBLE_ALPHA</code> secret (a GitHub token with read access to the private crate) under Settings &gt; Secrets and variables &gt; Actions.</p></blockquote>
+<h3>Workflows vs. package tool</h3>
+<p>Some, but not all, of what the <span class="b">Create Downloadable Binaries</span> workflow does can also be done locally with the <span class="b">Package tool</span>. <code>./package</code> builds and bundles the same targets for the platform you are running on, and <code>./package --publish</code> attaches the release assets to a GitHub Release. Note that the package tool builds only the platform it runs on, whereas GitHub Actions build the binaries for all platforms on separate runners in parallel.</p>
+<h2>Download &amp; Run with Docker</h2>
+<p>Build the Docker image:</p>
+<pre><code class="language-bash">docker build -t incredible .</code></pre>
+<p>Run the container:</p>
+<pre><code class="language-bash">docker run -it incredible</code></pre>
+<p>This downloads the latest release binary from GitHub and runs it inside the container.</p>
+<div class="rule">················································································</div>
+<p><a class="rel" href="../index.html">Home</a> | <a class="rel" href="index.html">Markdowns</a></p>
+</main>
+</div>
+</body>
+</html>

@@ -4,4 +4,4 @@
 
 ---
 
-[Home](./index.md) | [Markdowns](./markdowns/index.md)
+[Home](./wasm.md) | [Markdowns](./markdowns/index.md)

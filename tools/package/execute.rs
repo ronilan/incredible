@@ -1,4 +1,4 @@
-use crate::cmd::{build, build_all, bundle, clean, publish, release, web};
+use crate::cmd::{build, build_all, bundle, clean, publish, release, static_site, web};
 use crate::state::{PackageTarget, State};
 use std::path::PathBuf;
 use std::process;
@@ -61,6 +61,13 @@ pub fn execute_package(state: &State, _extra_args: &[String]) {
             Ok::<(), std::io::Error>(())
         }
         PackageTarget::Wasm => web::build().and_then(|()| {
+            if state.is_preview {
+                web::serve()
+            } else {
+                Ok(())
+            }
+        }),
+        PackageTarget::Static => static_site::build().and_then(|()| {
             if state.is_preview {
                 web::serve()
             } else {

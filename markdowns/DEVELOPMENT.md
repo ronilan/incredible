@@ -84,4 +84,4 @@ This downloads the latest release binary from GitHub and runs it inside the cont
 
 ---
 
-[Home](./index.md) | [Markdowns](./markdowns/index.md)
+[Home](./wasm.md) | [Markdowns](./markdowns/index.md)

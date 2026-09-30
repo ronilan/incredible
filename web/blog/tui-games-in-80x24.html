@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!-- GENERATED from blog/tui-games-in-80x24.md by the package tool (static_site). Do not edit; edit the markdown instead. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TUI Games in 80x24</title>
+<meta name="version" content="0.1.0" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="stylesheet" href="../style.css" />
+</head>
+<body class="static">
+<div id="terminal" class="static">
+<main class="static-doc">
+<p><a class="rel" href="../index.html">Home</a> | <a class="rel" href="index.html">Blog</a></p>
+<div class="rule">················································································</div>
+<h1>TUI Games in 80x24</h1>
+<p><img alt="Banner" src="images/tui-games-in-80x24.png" /></p>
+<h2>TUI vs. Retro</h2>
+<p>It is common to think about Text User Interfaces (i.e. TUIs) as “retro”. Thus, when TUI games come to mind, it is common to equate them with retro games. Think Tetris, Doom or Pac-Man. However, while retro games were played “in the terminal” and were limited in their graphic capabilities compared to modern ones, they were not TUI games.</p>
+<p>Retro 2D games operate on pixels. <a class="ext" target="_blank" rel="noopener" href="https://tralvex.com/download/forum/The%20Pac-Man%20Dossier.pdf">The arcade version of Pac-Man</a>, for example, ran at 224x288 pixels. The display was divided into 28×36 tiles, where each individual tile was 8×8 pixels. To draw a ghost, one needs 64 pixels. Modern fantasy consoles like <a class="ext" target="_blank" rel="noopener" href="https://www.lexaloffle.com/pico-8.php">PICO-8</a>, which recreate the “retro feel”, use a 128x128 pixel display, with sprites again going for the 8x8 format. That’s not a lot of pixels, but it is enough. The <a class="ext" target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Flappy_Bird#/media/File:Flappy_Bird_icon.png">Flappy Bird</a> from the classic iPhone game fits into 17x12 pixels.</p>
+<h2>Characters, not Pixels</h2>
+<p>TUIs don’t work with pixels; they work with characters. There aren’t many of those, and they are rectangular in shape. The historic default screen of the terminal is 80 columns by 24 rows. A Flappy Bird where every char is used as a pixel will occupy half the screen height.</p>
+<p>24x80 is smaller and more limited than the arcade version of Pac-Man; even drawing a pixel-based ghost would be impossible. However, with the TUI being character-based, the Pac-Dots could be expressed as a Unicode dot ● and the ghost can be expressed with a ghost emoji <span class="wc">👻</span>. Good. Well, maybe. That emoji would occupy 2 columns, not one. This would force the corridors to also be 2 characters wide. That dot will not be centered in the vertical ones; we’ll have to use an emoji here too <span class="wc">⚪</span>. The emojis would look like a ghost and a dot, well, most of the time, but not always. Even when they do, they will look different between platforms. macOS ghost is not Windows ghost. The emojis would sit in what, depending on the user-defined font, is most of the time almost a square, but not always. The rows would fill the screen, most of the time, unless the user font again causes a gap, or the terminal they use, or this or that, etc. etc.</p>
+<p>Unstable, limited, dependent on user settings - why even bother?</p>
+<h2>Games as Testing</h2>
+<p>Well, as it turns out, games are a great way to do end-to-end testing on a TUI framework. A TUI-based Pac-Man has not been implemented (yet), but three other games that are part of Incredible’s alpha testing have been released and open sourced (CC BY-NC-ND 4.0). They all fit into that strict 80x24 format.</p>
+<h3>Rewordle</h3>
+<p>The first is <a class="ext" target="_blank" rel="noopener" href="https://github.com/ronilan/rewordle-rust">Rewordle</a>. It lets you play all the Wordle games from the beginning. This one is actually not new. A version of it existed for a while. It was just converted to use Incredible under the hood. The game stayed the same, but since Incredible can build the same codebase to multiple platforms, it is now <a class="ext" target="_blank" rel="noopener" href="https://ronilan.github.io/rewordle-rust/">playable on the web</a> too.</p>
+<p>Conceptually, Rewordle is a flat, single-layer static UI; it uses only the TUI layer of Incredible and has a flat, homogeneous element tree. It’s an example of the simplest form of a TUI app/game.</p>
+<p>The game was <a class="ext" target="_blank" rel="noopener" href="https://github.com/ronilan/rewordle">initially handcrafted</a> in the <a class="ext" target="_blank" rel="noopener" href="https://github.com/liam-ilan/crumb">Crumb</a> programming language. It was then converted to Rust. The process was <a class="ext" target="_blank" rel="noopener" href="https://github.com/ronilan/rusticon/blob/main/markdowns/From_Crumbicon_to_Rusticon.md">documented</a>. The “mechanical” conversion to Incredible was done with <a class="ext" target="_blank" rel="noopener" href="https://github.com/ronilan/rusticon/tree/tui">Rusticon’s TUI branch</a> as a reference. With minimal prompting, <a class="ext" target="_blank" rel="noopener" href="https://research.meta.ai/blog/introducing-muse-spark-1-3">Muse Spark 1.3</a> was able to execute this in (almost) a single pass.</p>
+<h3>Shape Sorting</h3>
+<p>The second is <a class="ext" target="_blank" rel="noopener" href="https://github.com/ronilan/shape-sorting">Shape Sorting</a>. This one is not strictly speaking a “game”. Calling it an activity would be more fitting. It is about sorting shapes by color or shape, with the keyboard, the mouse, or both, and trying to do so as fast as possible.</p>
+<p>Shape Sorting makes use of Incredible’s heterogeneous element tree and implements custom elements of two kinds, the ones that have access to the user-defined state (a.k.a. Encapsulated Elements) and the ones that are generic (a.k.a. Reusable Elements). The “game” evolved over a long time. It originated as a test case for single-character drag-and-drop while the core library was under development; it then became a test bed for element layering and organization patterns. It demonstrates the desired UI case where every action can be done by both the keyboard and the mouse and illustrates affordance differences between the two.</p>
+<h3>Incredible Flappy</h3>
+<p>Last but not least is <a class="ext" target="_blank" rel="noopener" href="https://github.com/ronilan/incredible-flappy">Incredible Flappy</a>. The game is “heavily inspired” by prior art, which usually means parts were lifted verbatim from something else. This time it is from <a class="ext" target="_blank" rel="noopener" href="https://asciinema.org/a/370006">Impossible Flappy</a>, a 2021 incarnation of the game built with Impossible.js.</p>
+<p>The original idea was to see how much of such a game can be built by an agent with detailed prompts. (Muse Spark 1.3 again via <a class="ext" target="_blank" rel="noopener" href="https://opencode.ai/">OpenCode</a>) It went well, very well actually, given that almost all of the code is LLM-written. That said, a lot of back and forth was needed to get the desired result on all UI and game-related aspects. Manual intervention was also required in a couple of instances where patterns were confused with “other frameworks”.</p>
+<p>The end result also includes something the original didn’t have: a mode that uses images for game elements. Incredible fully supports the <a class="ext" target="_blank" rel="noopener" href="https://sw.kovidgoyal.net/kitty/graphics-protocol/">Kitty Terminal graphics protocol</a>, so when the terminal game is played in either the <a class="ext" target="_blank" rel="noopener" href="https://sw.kovidgoyal.net/kitty/">Kitty</a> or <a class="ext" target="_blank" rel="noopener" href="https://ghostty.org/">Ghostty</a> terminals, pressing K will transform Flappy into Fluffy and things will look a whole lot more glitzy. Needless to say, a game with moving images is an excellent test case for the limits of both the framework and the protocol. The limits of the latter were actually hit in two places, but more on that some other time.</p>
+<h2>Bottom Line</h2>
+<p>TUI games must adhere to strict requirements, are hard to make, and are good for testing. But what about playability?</p>
+<p>Well, it looks like what TUI games lack in fanfare, they compensate for with product placement. In this day and age, while waiting for the agent to complete the task, what can a developer do? Ah, here’s a casual game. Let’s go, Kitty! Bump Bump Bump, Oops!</p>
+<p>I’m busy now,<br />
+Ron</p>
+<p>September 27, 2026</p>
+<div class="rule">················································································</div>
+<p><a class="rel" href="../index.html">Home</a> | <a class="rel" href="index.html">Blog</a></p>
+</main>
+</div>
+</body>
+</html>

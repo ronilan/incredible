@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- GENERATED from markdowns/DEVELOPMENT_PREREQUISITES.md by the package tool (static_site). Do not edit; edit the markdown instead. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Development Environment Prerequisites</title>
+<meta name="version" content="0.1.0" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="stylesheet" href="../style.css" />
+</head>
+<body class="static">
+<div id="terminal" class="static">
+<main class="static-doc">
+<h1>Development Environment Prerequisites</h1>
+<p>This document outlines the system requirements and installation steps needed to develop with this template.</p>
+<h2>Stack</h2>
+<ul><li>Rust</li><li>Cargo</li><li>Incredible</li><li>WebAssembly</li><li>macOS AppKit (via objc2)</li><li>Windows API (via windows-rs)</li></ul>
+<h2>GitHub Authentication</h2>
+<p>This project depends on the private <a class="ext" target="_blank" rel="noopener" href="https://github.com/ronilan/incredible-alpha">incredible-alpha</a> crate, pulled by Cargo as a git dependency over HTTPS. The first build (<code>cargo build-tools</code>) will fail until your machine can read that repo.</p>
+<p>The easiest way to authenticate is the <a class="ext" target="_blank" rel="noopener" href="https://cli.github.com/">GitHub CLI</a> — download and install it from <a class="ext" target="_blank" rel="noopener" href="https://cli.github.com/">cli.github.com</a> if you don't have it already:</p>
+<pre><code class="language-bash">gh auth login</code></pre>
+<p>This configures git's credential helper, so <code>git</code> (and Cargo fetching through it) can access the private repository without prompting.</p>
+<p>Alternatively, create a fine-grained Personal Access Token with read access to <code>ronilan/incredible-alpha</code> and store it with your OS credential manager (macOS Keychain / Windows Credential Manager).</p>
+<h2>macOS</h2>
+<ol><li><span class="b">Install Xcode Command Line Tools</span>: <pre><code class="language-bash">   xcode-select --install</code></pre></li><li><span class="b">Install Rust</span> - Download and run the installer from <a class="ext" target="_blank" rel="noopener" href="https://rustup.rs/">rustup.rs</a></li><li><span class="b">Install wasm-pack</span>: <pre><code class="language-bash">   cargo install wasm-pack</code></pre></li></ol>
+<h2>Windows</h2>
+<ol><li><span class="b">Install Rust</span> - Download and run <a class="ext" target="_blank" rel="noopener" href="https://rustup.rs/">rustup-init.exe</a> from <a class="ext" target="_blank" rel="noopener" href="https://rustup.rs/">rustup.rs</a></li><li><span class="b">Install wasm-pack</span> - In PowerShell: <pre><code class="language-powershell">   cargo install wasm-pack</code></pre></li><li><span class="b">Install Visual Studio Build Tools</span> - Download from <a class="ext" target="_blank" rel="noopener" href="https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022">visualstudio.microsoft.com</a>. In the installer, select the <span class="b">"Desktop development with C++"</span> workload. This provides the Windows SDK and is required to build the native Windows binary.</li></ol>
+</main>
+</div>
+</body>
+</html>

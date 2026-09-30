@@ -12,11 +12,12 @@ pub fn build_select_target() -> Select<State> {
         .x(1)
         .y(1)
         .width(32)
-        .height(6)
+        .height(7)
         .focused(true)
         .add_item("All Targets", "all")
         .add_item("Terminal", "terminal")
-        .add_item("Web", "wasm");
+        .add_item("Web", "wasm")
+        .add_item("Static Site", "static");
 
     if is_macos() {
         select.add_item("macOS Native", "macos");

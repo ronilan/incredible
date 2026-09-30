@@ -1,4 +1,4 @@
-[Home](./index.md) | [Blog](./blog/index.md)
+[Home](./wasm.md) | [Blog](./blog/index.md)
 
 ---
 
@@ -16,7 +16,7 @@ For a programming language, a small *Hello World* illustrates the syntax. For li
 
 Here is a *Hello World* for Incredible.
 
-It takes the form of a *Moose Clicker*, a small Rust program  that prints a moose emoji to the screen. When the moose emoji is clicked with the mouse, a counter is incremented.
+It takes the form of a *Moose Clicker*, a small Rust program that prints a moose emoji to the screen. When the moose emoji is clicked with the mouse, a counter is incremented.
 
 ```rust
 use incredible::*;
@@ -74,4 +74,4 @@ Ron
 
 ---
 
-[Home](./index.md) | [Blog](./blog/index.md)
+[Home](./wasm.md) | [Blog](./blog/index.md)

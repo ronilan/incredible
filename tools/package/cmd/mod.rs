@@ -4,4 +4,5 @@ pub mod bundle;
 pub mod clean;
 pub mod publish;
 pub mod release;
+pub mod static_site;
 pub mod web;

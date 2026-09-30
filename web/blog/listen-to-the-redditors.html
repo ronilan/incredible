@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!-- GENERATED from blog/listen-to-the-redditors.md by the package tool (static_site). Do not edit; edit the markdown instead. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Listen to your Users the Redditors</title>
+<meta name="version" content="0.1.0" />
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="stylesheet" href="../style.css" />
+</head>
+<body class="static">
+<div id="terminal" class="static">
+<main class="static-doc">
+<p><a class="rel" href="../index.html">Home</a> | <a class="rel" href="index.html">Blog</a></p>
+<div class="rule">················································································</div>
+<h1>Listen to your <s>Users</s> the Redditors</h1>
+<p>A few days back I wrote a blog post and then posted it to <a class="ext" target="_blank" rel="noopener" href="https://www.reddit.com/r/programming/comments/1wspai2/tui_games_in_80x24/">Reddit</a> and <a class="ext" target="_blank" rel="noopener" href="https://news.ycombinator.com/item?id=49897427">Hacker News</a>. The post was about TUI game development with Incredible. The comments were about the scroll. The website scroll. People (and bots) were not happy.</p>
+<h2>Experimental</h2>
+<p>Incredible is an experimental Rust TUI framework. That is, it is primarily designed to allow rapid development of terminal apps with intricate user interactions. However, it can also build the same codebase into WASM, so the terminal app also runs in the browser (as well as into a native window, so that the terminal app just runs without the terminal baggage).</p>
+<p>There are major technical differences between the browser's sandbox and the terminal's YOLO. While the use case for the WASM build is still to be proven, being "experimental" has its benefits, and so considerable time was put into making sure things in the browser are on par with things in the terminal.</p>
+<p>Given the ability to build things for the browser, and given the opportunity to put code in front of users, when this website was created it was created as an Incredible app compiled to WASM. After all, it is a much more interesting way to build a website than to vibe a sleek site with a huge hero, rounded cards, oversized typography, glowing effects, and lots of whitespace.</p>
+<p>And this is how one gets into trouble.</p>
+<p>A lot of effort went into Incredible's ScrollArea element. It works great in the terminal. It works great cross-platform. It works great on all the iPhones tested. However, it does not work exactly like browser scroll. It operates in row space, not pixel space. It isn't kinetic. It isn't elastic. It feels "mechanical". It may not play well with some wheel-drag methods. The user has expectations of how a browser scrolls a page, and those are not met.</p>
+<p>The <a class="ext" target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Uncanny_valley">uncanny valley</a> of websites.</p>
+<h2>Experimental Still</h2>
+<p>So, to remedy the issue, a new experiment: a 100% static HTML website that is almost a pixel-perfect clone of the WASM app. A landing page for first clicks. A calibrator of expectations.</p>
+<p>The WASM app-based website is still <a class="rel" href="../wasm.html">here</a></p>
+<p>And now that you know what to expect, you are welcomed to visit.</p>
+<p>I'll go impl some stuff now,<br />
+Ron</p>
+<p><em>September 29, 2026</em></p>
+<div class="rule">················································································</div>
+<p><a class="rel" href="../index.html">Home</a> | <a class="rel" href="index.html">Blog</a></p>
+</main>
+</div>
+</body>
+</html>

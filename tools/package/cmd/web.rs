@@ -6,7 +6,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::thread;
 
-fn copy_dir_all(src: &Path, dst: &Path) -> io::Result<()> {
+pub(crate) fn copy_dir_all(src: &Path, dst: &Path) -> io::Result<()> {
     fs::create_dir_all(dst)?;
     for entry in fs::read_dir(src)? {
         let entry = entry?;
@@ -142,12 +142,8 @@ pub fn build() -> io::Result<()> {
     }
 
     let meta = cargo::html_metadata();
-    let index_from = match fs::read_to_string(Path::new("web").join("index.html")) {
-        Ok(s) => s,
-        Err(e) => return Err(e),
-    };
-    let injected = inject_html(&index_from, &meta);
-    write_file(&docs_dir().join("index.html"), &injected)?;
+    write_wasm_shell()?;
+    super::static_site::build_static_pages()?;
 
     if !meta.cname.is_empty() {
         write_file(&docs_dir().join("CNAME"), &format!("{}\n", meta.cname))?;
@@ -158,7 +154,21 @@ pub fn build() -> io::Result<()> {
     Ok(())
 }
 
-fn docs_dir() -> PathBuf {
+/// Write the WASM shell (`web/wasm.html` -> `docs/wasm.html`) with
+/// package metadata injected. Used by both the full `wasm` build and
+/// the fast `static` build so `docs/` stays consistent.
+pub fn write_wasm_shell() -> io::Result<()> {
+    let meta = cargo::html_metadata();
+    let index_from = match fs::read_to_string(Path::new("web").join("wasm.html")) {
+        Ok(s) => s,
+        Err(e) => return Err(e),
+    };
+    let injected = inject_html(&index_from, &meta);
+    write_file(&docs_dir().join("wasm.html"), &injected)?;
+    Ok(())
+}
+
+pub(crate) fn docs_dir() -> PathBuf {
     PathBuf::from("docs")
 }
 

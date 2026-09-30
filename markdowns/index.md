@@ -7,4 +7,4 @@
 
 ---
 
-[Home](./index.md)
+[Home](./wasm.md)

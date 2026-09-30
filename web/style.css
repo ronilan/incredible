@@ -38,6 +38,11 @@ html, body {
   touch-action: manipulation;
 }
 
+html {
+  overscroll-behavior: none;
+  background-color: #080808;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -127,6 +132,13 @@ body {
   width: 2ch;
   text-align: center;
   vertical-align: bottom;
+}
+
+/* In flowing static text the fixed cell aligns to the baseline, and the
+   glyph sits at the start of its 2-cell space like the terminal. */
+.static-doc .wc {
+  vertical-align: baseline;
+  text-align: left;
 }
 /* Fixed-width 1-cell character — forces any glyph into exactly 1ch.
    Used for CTL scripts (Devanagari, etc.) whose natural font width
@@ -497,4 +509,219 @@ body {
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+/* ========================================
+   STATIC SITE (zero-JS clone)
+   Scoped to body.static / .static-doc — the WASM shell above is unaffected.
+   Mirrors the TUI theme rules in src/ui/theme.rs using the Basic Dark
+   palette: H1 ansi-12, H2 ansi-13, H3 ansi-14, external links dotted
+   underline (hover ansi-11), relative links single underline (hover ansi-10).
+   ======================================== */
+
+body.static {
+  overflow: auto;
+}
+
+#terminal.static {
+  display: block;
+  width: auto;
+  height: auto;
+  min-height: 100dvh;
+  overflow: visible;
+  /* Framework reserves 1 right column for the scrollbar (clip right=1) and
+     centers the markdown inside the reduced region. Mirror that so the
+     column sits exactly where the WASM one does. */
+  padding-right: 1ch;
+}
+
+.static-doc {
+  max-width: 80.5ch;
+  margin: 0 auto;
+  padding: 0 2ch 36px;
+  font-size: 13.5px;
+  line-height: 18px;
+  overflow-wrap: break-word;
+}
+
+/* Block rhythm mirrors elements_flow_down(1): exactly one empty row
+   between blocks. UA margins collapse to a single 18px gap. */
+.static-doc > * {
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.static-doc h1::before {
+  content: "# ";
+}
+
+.static-doc h2::before {
+  content: "## ";
+}
+
+.static-doc h3::before {
+  content: "### ";
+}
+
+.static-doc h1 {
+  font-size: 1em;
+  font-weight: 400;
+  color: #00AFFF;
+}
+
+.static-doc h2 {
+  font-size: 1em;
+  font-weight: 400;
+  color: #D7AFFF;
+}
+
+.static-doc h3 {
+  font-size: 1em;
+  font-weight: 400;
+  color: #00FFFF;
+}
+
+.static-doc a.ext {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  font-weight: 700;
+}
+
+.static-doc a.ext:hover {
+  color: #FFD75F;
+}
+
+.static-doc a.rel {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  font-weight: 700;
+}
+
+.static-doc a.rel:hover {
+  color: #87FF87;
+}
+
+/* Activation inverts the link's hovered color, like the terminal swapping
+   the cell's fg/bg (click implies hover, so rel=green, ext=yellow). */
+.static-doc a.rel:active {
+  background-color: #87FF87;
+  color: #080808;
+}
+
+.static-doc a.ext:active {
+  background-color: #FFD75F;
+  color: #080808;
+}
+
+.static-doc blockquote {
+  margin: 0 0 18px;
+  padding-left: 2ch;
+  border: none;
+  font-weight: 700;
+}
+
+.static-doc pre {
+  font-family: 'JetBrains Mono', monospace;
+  background: transparent;
+  border: none;
+  padding: 0;
+  overflow-x: auto;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.static-doc code {
+  font-family: 'JetBrains Mono', monospace;
+  background: transparent;
+  padding: 0;
+}
+
+/* Bold (was <strong>): explicit weight, no UA semantics. */
+.static-doc .b {
+  font-weight: 700;
+}
+
+.static-doc pre code {
+  background: transparent;
+  padding: 0;
+  font-style: italic;
+}
+
+/* Horizontal rule: one middot per cell, exactly like
+   HorizontalLineKind::Dotted. 18px line + 18px gap = 2 rows on-grid. */
+.static-doc .rule {
+  height: 18px;
+  margin-top: 0;
+  margin-bottom: 18px;
+  white-space: pre;
+  overflow: hidden;
+  opacity: 0.6;
+}
+
+.static-doc img {
+  max-width: 100%;
+  height: auto;
+}
+
+.static-doc pre.logo-big,
+.static-doc pre.logo-small {
+  background: transparent;
+  border: none;
+  padding: 0;
+  overflow-x: visible;
+  white-space: pre;
+}
+
+.static-doc pre.logo-small {
+  display: none;
+}
+
+/* App shows Big+Shadow at wrap width >= 80, Small+Plain below. */
+@media (max-width: 76ch) {
+  .static-doc pre.logo-big {
+    display: none;
+  }
+  .static-doc pre.logo-small {
+    display: block;
+  }
+}
+
+.static-doc .spacer {
+  height: 18px;
+  margin-bottom: 0;
+}
+
+/* Lists mirror the terminal: "* " / "N. " markers, body indented by the
+   marker width, wrapped lines aligned under the body start. */
+.static-doc ul,
+.static-doc ol {
+  list-style: none;
+  margin-top: 0;
+  margin-bottom: 18px;
+  padding: 0;
+}
+
+.static-doc ul > li {
+  padding-left: 2ch;
+  text-indent: -2ch;
+}
+
+.static-doc ul > li::before {
+  content: "* ";
+}
+
+.static-doc ol {
+  counter-reset: static-ol;
+}
+
+.static-doc ol > li {
+  counter-increment: static-ol;
+  padding-left: 3ch;
+  text-indent: -3ch;
+}
+
+.static-doc ol > li::before {
+  content: counter(static-ol) ". ";
 }

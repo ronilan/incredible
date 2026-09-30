@@ -648,6 +648,8 @@ dependencies = [
  "incredible_window_windows",
  "resvg",
  "serde_json",
+ "unicode-segmentation",
+ "unicode-width",
  "wasm-bindgen",
  "windows-sys 0.59.0",
 ]
