@@ -2,7 +2,7 @@
 
 # Recent Posts
 
-## Listen to your ~~Users~~ the Redditors
+## Listen to ~~your users~~ the Redditors
 *September 29, 2026*
 
 A few days back I wrote a blog post and then posted it to Reddit and Hacker News. The post was about TUI game development with Incredible. The comments were about the scroll. The website scroll. People (and bots) were not happy.
