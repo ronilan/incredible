@@ -2,7 +2,8 @@
 build-config = "build --release --bin config"
 build-package = "build --release --bin package"
 build-run = "build --release --bin run"
-build-tools = "build --release --bin config --bin package --bin run"
+build-static-site = "build --release --bin static_site"
+build-tools = "build --release --bin config --bin package --bin run --bin static_site"
 
 [net]
 # Use the git CLI (and its credential helper, configured via `gh auth login`)

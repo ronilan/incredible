@@ -27,6 +27,16 @@ fn get_field(section: &str, key: &str) -> String {
                 if val.starts_with('"') && val.ends_with('"') && val.len() >= 2 {
                     return val[1..val.len() - 1].to_string();
                 }
+                // Bare values (e.g. integers like mobile-min-width).
+                let bare: String = val
+                    .split_whitespace()
+                    .next()
+                    .unwrap_or_default()
+                    .trim_end_matches(',')
+                    .to_string();
+                if !bare.is_empty() {
+                    return bare;
+                }
             }
         }
     }
@@ -81,11 +91,7 @@ pub fn package_version() -> String {
     let cargo_toml = fs::read_to_string("Cargo.toml").unwrap_or_default();
     let pkg_section = extract_section(&cargo_toml, "package");
     let v = get_field(&pkg_section, "version");
-    if v.is_empty() {
-        "0.1.0".to_string()
-    } else {
-        v
-    }
+    if v.is_empty() { "0.1.0".to_string() } else { v }
 }
 
 pub fn html_metadata() -> HtmlMetadata {

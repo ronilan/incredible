@@ -4,9 +4,13 @@
 //! `src/ui/loader.rs`) into plain HTML pages styled by `web/style.css`.
 //! No JavaScript: no theme picker, no WASM, default (Basic Dark) palette.
 //!
-//! Markdown files are the source of truth. `cargo run --bin package -- static`
-//! regenerates `docs/` without running wasm-pack; the full `wasm` target
-//! calls this too so `docs/` always contains both experiences.
+//! Markdown files are the source of truth. `cargo run --bin static_site`
+//! regenerates `docs/` without running wasm-pack; the package tool runs it
+//! (via `cargo run --release --bin static_site`) for its `static` target and
+//! inside its `wasm` target, so `docs/` always contains both experiences.
+//!
+//! ALL site data lives here (page manifest, logo art); `tools/` stays
+//! data-independent so the same tools can run against a different site.
 
 use std::fs;
 use std::io;
@@ -26,10 +30,7 @@ const PAGES: &[(&str, &str)] = &[
         "blog/listen-to-the-redditors.html",
     ),
     ("blog/hello-world.md", "blog/hello-world.html"),
-    (
-        "blog/tui-games-in-80x24.md",
-        "blog/tui-games-in-80x24.html",
-    ),
+    ("blog/tui-games-in-80x24.md", "blog/tui-games-in-80x24.html"),
     ("markdowns/index.md", "markdowns/index.html"),
     ("markdowns/AI_POLICY.md", "markdowns/AI_POLICY.html"),
     ("markdowns/CONTRIBUTING.md", "markdowns/CONTRIBUTING.html"),
@@ -43,14 +44,14 @@ const PAGES: &[(&str, &str)] = &[
 
 /// Full static build: WASM shell refresh + markdown pages + images.
 pub fn build() -> io::Result<()> {
-    super::web::write_wasm_shell()?;
+    crate::shell::write_wasm_shell()?;
     build_static_pages()
 }
 
 /// Render every markdown page into `docs/` and copy referenced images.
 pub fn build_static_pages() -> io::Result<()> {
     // Shared web assets (also copied by the full wasm build; idempotent).
-    let docs = super::web::docs_dir();
+    let docs = crate::shell::docs_dir();
     for asset in ["style.css", "favicon.svg"] {
         let from = Path::new("web").join(asset);
         if from.exists() {
@@ -59,23 +60,20 @@ pub fn build_static_pages() -> io::Result<()> {
     }
     let fonts_from = Path::new("web").join("fonts");
     if fonts_from.exists() {
-        super::web::copy_dir_all(&fonts_from, &docs.join("fonts"))?;
+        crate::shell::copy_dir_all(&fonts_from, &docs.join("fonts"))?;
     }
 
     for (src, out) in PAGES {
         let md = fs::read_to_string(src).map_err(|e| {
-            io::Error::new(
-                e.kind(),
-                format!("static_site: cannot read {}: {}", src, e),
-            )
+            io::Error::new(e.kind(), format!("static_site: cannot read {}: {}", src, e))
         })?;
         let html = render_page(src, out, &md);
-        write_file(&super::web::docs_dir().join(out), &html)?;
+        write_file(&crate::shell::docs_dir().join(out), &html)?;
     }
 
     let images_from = Path::new("blog/images");
     if images_from.exists() {
-        let images_to = super::web::docs_dir().join("blog/images");
+        let images_to = crate::shell::docs_dir().join("blog/images");
         fs::create_dir_all(&images_to)?;
         for entry in fs::read_dir(images_from)? {
             let entry = entry?;
@@ -109,9 +107,12 @@ fn parent_dir(src: &str) -> &str {
 
 /// "../" prefix needed from an output page to reach the site root.
 fn root_prefix(out: &str) -> String {
-    "../".repeat(parent_dir(out).is_empty().then_some(0).unwrap_or(
-        parent_dir(out).split('/').count(),
-    ))
+    "../".repeat(
+        parent_dir(out)
+            .is_empty()
+            .then_some(0)
+            .unwrap_or(parent_dir(out).split('/').count()),
+    )
 }
 
 /// Join a repo-relative dir and a link path, resolving "." segments.
@@ -280,7 +281,10 @@ fn highlight_line(lang: &str, line: &str) -> Vec<(u8, String)> {
             break;
         }
         // Strings with backslash escapes.
-        if c[i] == '"' || (c[i] == '\'' && lang != "rust") || (c[i] == '\'' && lang == "rust" && is_rust_char_literal(&c, i)) {
+        if c[i] == '"'
+            || (c[i] == '\'' && lang != "rust")
+            || (c[i] == '\'' && lang == "rust" && is_rust_char_literal(&c, i))
+        {
             flush(&mut runs, &mut cur, cur_color);
             let quote = c[i];
             let mut s = String::from(quote);
@@ -300,11 +304,15 @@ fn highlight_line(lang: &str, line: &str) -> Vec<(u8, String)> {
             continue;
         }
         // PowerShell variables.
-        if lang == "powershell" && c[i] == '$' && i + 1 < c.len() && (is_ident_char(c[i + 1]) || c[i + 1] == '{') {
+        if lang == "powershell"
+            && c[i] == '$'
+            && i + 1 < c.len()
+            && (is_ident_char(c[i + 1]) || c[i + 1] == '{')
+        {
             flush(&mut runs, &mut cur, cur_color);
             let mut s = String::from("$");
             i += 1;
-            while i < c.len() && (is_ident_char(c[i]) || c[i] == ':' || (c[i] == '}' )) {
+            while i < c.len() && (is_ident_char(c[i]) || c[i] == ':' || (c[i] == '}')) {
                 if c[i] == '}' {
                     s.push('}');
                     i += 1;
@@ -320,7 +328,13 @@ fn highlight_line(lang: &str, line: &str) -> Vec<(u8, String)> {
         if c[i].is_ascii_digit() && !prev_is_ident(&c, i) {
             flush(&mut runs, &mut cur, cur_color);
             let mut s = String::new();
-            while i < c.len() && (c[i].is_ascii_alphanumeric() || c[i] == '_' || c[i] == '.' || c[i] == 'x' || c[i] == 'X') {
+            while i < c.len()
+                && (c[i].is_ascii_alphanumeric()
+                    || c[i] == '_'
+                    || c[i] == '.'
+                    || c[i] == 'x'
+                    || c[i] == 'X')
+            {
                 // Stop a trailing '.' unless it's a decimal point (digit follows).
                 if c[i] == '.' && (i + 1 >= c.len() || !c[i + 1].is_ascii_digit()) {
                     break;
@@ -379,7 +393,11 @@ fn classify_word(lang: &str, w: &str, after: &str) -> (u8, bool) {
             if after == "(" {
                 return (12, false); // call site (incl. methods)
             }
-            if w.chars().next().map(|ch| ch.is_uppercase()).unwrap_or(false) {
+            if w.chars()
+                .next()
+                .map(|ch| ch.is_uppercase())
+                .unwrap_or(false)
+            {
                 return (11, false); // CamelCase type
             }
             (7, false)
@@ -404,20 +422,20 @@ fn classify_word(lang: &str, w: &str, after: &str) -> (u8, bool) {
 
 const RUST_KEYWORDS: &[&str] = &[
     "as", "async", "await", "break", "const", "continue", "crate", "do", "dyn", "else", "enum",
-    "extern", "fn", "for", "if", "impl", "in", "let", "loop", "match", "mod", "move", "mut",
-    "pub", "ref", "return", "self", "Self", "static", "struct", "super", "trait", "type",
-    "unsafe", "use", "where", "while",
+    "extern", "fn", "for", "if", "impl", "in", "let", "loop", "match", "mod", "move", "mut", "pub",
+    "ref", "return", "self", "Self", "static", "struct", "super", "trait", "type", "unsafe", "use",
+    "where", "while",
 ];
 
 const BASH_KEYWORDS: &[&str] = &[
-    "case", "coproc", "do", "done", "elif", "else", "esac", "fi", "for", "function", "if",
-    "in", "select", "then", "time", "until", "while",
+    "case", "coproc", "do", "done", "elif", "else", "esac", "fi", "for", "function", "if", "in",
+    "select", "then", "time", "until", "while",
 ];
 
 const POWERSHELL_KEYWORDS: &[&str] = &[
-    "begin", "break", "catch", "continue", "do", "else", "elseif", "end", "exit", "finally",
-    "for", "foreach", "function", "if", "in", "param", "process", "return", "switch", "throw",
-    "try", "until", "while",
+    "begin", "break", "catch", "continue", "do", "else", "elseif", "end", "exit", "finally", "for",
+    "foreach", "function", "if", "in", "param", "process", "return", "switch", "throw", "try",
+    "until", "while",
 ];
 
 /// Render a fenced code line: highlighted spans for known languages, plain
@@ -500,10 +518,7 @@ fn find_strong_end(c: &[char], from: usize) -> Option<usize> {
 fn find_em_end(c: &[char], from: usize) -> Option<usize> {
     let mut j = from;
     while j < c.len() {
-        if c[j] == '*'
-            && (j == 0 || c[j - 1] != '*')
-            && (j + 1 >= c.len() || c[j + 1] != '*')
-        {
+        if c[j] == '*' && (j == 0 || c[j - 1] != '*') && (j + 1 >= c.len() || c[j + 1] != '*') {
             return Some(j);
         }
         j += 1;
@@ -565,11 +580,7 @@ fn render_link(inner: &str, url: &str, doc: &Doc) -> String {
             ),
             None => {
                 eprintln!("static_site: warning: unresolved link '{}'", url);
-                format!(
-                    "<a class=\"rel\" href=\"{}\">{}</a>",
-                    esc_attr(url),
-                    label
-                )
+                format!("<a class=\"rel\" href=\"{}\">{}</a>", esc_attr(url), label)
             }
         }
     }
@@ -674,28 +685,24 @@ fn render_inline(input: &str, doc: &Doc) -> String {
                     }
                 }
             }
-            '!' if i + 1 < c.len() && c[i + 1] == '[' => {
-                match parse_bracket(&c, i + 1) {
-                    Some((inner, next))
-                        if next < c.len() && c[next] == '(' =>
-                    {
-                        match parse_paren(&c, next) {
-                            Some((url, after)) => {
-                                out.push_str(&render_image(&inner, &url, doc));
-                                i = after;
-                            }
-                            None => {
-                                out.push('!');
-                                i += 1;
-                            }
+            '!' if i + 1 < c.len() && c[i + 1] == '[' => match parse_bracket(&c, i + 1) {
+                Some((inner, next)) if next < c.len() && c[next] == '(' => {
+                    match parse_paren(&c, next) {
+                        Some((url, after)) => {
+                            out.push_str(&render_image(&inner, &url, doc));
+                            i = after;
+                        }
+                        None => {
+                            out.push('!');
+                            i += 1;
                         }
                     }
-                    _ => {
-                        out.push('!');
-                        i += 1;
-                    }
                 }
-            }
+                _ => {
+                    out.push('!');
+                    i += 1;
+                }
+            },
             '[' => match parse_bracket(&c, i) {
                 Some((inner, next)) if next < c.len() && c[next] == '(' => {
                     match parse_paren(&c, next) {
@@ -747,90 +754,18 @@ fn render_inline(input: &str, doc: &Doc) -> String {
     out
 }
 
-/// Block-char "Incredible" logo, composed from the same crate data the WASM
-/// app uses (BlockCharsShadow Big, BlockCharsPlainSmall), with the
-/// GradientLabel transform baked in (stops ansi4/5/6/4, horizontal, rest
-/// frame offset 0 — no animation in the static build).
-const LOGO_BIG: &str = include_str!("logo_big.txt");
-const LOGO_SMALL: &str = include_str!("logo_small.txt");
+/// Frozen stand-ins for live embeds (mirrors `src/ui/`): each lives in its
+/// own file next to this module, like the logo art.
+const MOOSE_CLICKER_HTML: &str = include_str!("moose_clicker.html");
 
-/// Basic Dark ANSI stops for the logo gradient (must match the
-/// `#probes .ansi-4/5/6` colors in web/style.css).
-const LOGO_STOPS: [[u8; 3]; 4] = [
-    [0x00, 0x5F, 0xAF],
-    [0xAF, 0x5F, 0xAF],
-    [0x00, 0xAF, 0xAF],
-    [0x00, 0x5F, 0xAF],
-];
-
-/// Mirror `lerp_stops_t`/`position_t` (offset 0, true color): color of
-/// column `x` in a `width`-column row as `#rrggbb`.
-fn logo_gradient_hex(x: usize, width: usize) -> String {
-    let eps = f32::EPSILON;
-    let mut t = if width > 1 {
-        x as f32 / (width - 1) as f32
-    } else {
-        0.0
-    };
-    t = t.min(1.0 - eps);
-    let t = if (t - 1.0).abs() < eps {
-        1.0
-    } else {
-        t.rem_euclid(1.0)
-    };
-    let scaled = t * (LOGO_STOPS.len() - 1) as f32;
-    let lo = scaled.floor() as usize;
-    let hi = (lo + 1).min(LOGO_STOPS.len() - 1);
-    let frac = scaled - lo as f32;
-    let lerp = |a: u8, b: u8| (a as f32 + (b as f32 - a as f32) * frac).round() as u8;
-    let [r0, g0, b0] = LOGO_STOPS[lo];
-    let [r1, g1, b1] = LOGO_STOPS[hi];
-    format!(
-        "#{:02x}{:02x}{:02x}",
-        lerp(r0, r1),
-        lerp(g0, g1),
-        lerp(b0, b1)
-    )
-}
-
-fn logo_pre(art: &str, class: &str) -> String {
-    let rows: Vec<Vec<char>> = art
-        .trim_end()
-        .lines()
-        .map(|l| l.trim_end().chars().collect())
-        .collect();
-    let width = rows.iter().map(|r| r.len()).max().unwrap_or(0);
-    let mut out = format!(
-        "<pre class=\"{}\" role=\"img\" aria-label=\"Incredible\">",
-        class
-    );
-    for (y, row) in rows.iter().enumerate() {
-        if y > 0 {
-            out.push('\n');
-        }
-        for x in 0..width {
-            match row.get(x) {
-                Some(' ') | None => out.push(' '),
-                Some(c) => {
-                    out.push_str(&format!(
-                        "<span style=\"color:{}\">{}</span>",
-                        logo_gradient_hex(x, width),
-                        esc_text(&c.to_string())
-                    ));
-                }
-            }
-        }
-    }
-    out.push_str("</pre>");
-    out
-}
+/// Frozen logo art with the gradient baked in: each file is the complete
+/// `<pre>` element, like `moose_clicker.html`. (Source art was composed from
+/// the same crate data the WASM app uses; Basic Dark stops ansi4/5/6/4.)
+const LOGO_BIG_HTML: &str = include_str!("logo_big.html");
+const LOGO_SMALL_HTML: &str = include_str!("logo_small.html");
 
 fn logo_html() -> String {
-    format!(
-        "{}\n{}",
-        logo_pre(LOGO_BIG, "logo-big"),
-        logo_pre(LOGO_SMALL, "logo-small")
-    )
+    format!("{}\n{}", LOGO_BIG_HTML, LOGO_SMALL_HTML)
 }
 
 /// Horizontal rule: one `·` per cell, exactly like
@@ -865,7 +800,7 @@ fn raw_html_line(trimmed: &str) -> Option<String> {
                 return Some(logo_html());
             }
             if trimmed.contains("src=\"moose_clicker\"") {
-                return Some("<p class=\"moose\"><span class=\"wc\">🫎</span>: 0</p>".to_string());
+                return Some(MOOSE_CLICKER_HTML.trim_end().to_string());
             }
             return Some(String::new());
         }
@@ -1018,8 +953,7 @@ fn render_blocks(src: &str, doc: Doc) -> String {
 
     for raw_line in src.lines() {
         let trimmed = raw_line.trim();
-        let indented =
-            raw_line.starts_with(' ') || raw_line.starts_with('\t');
+        let indented = raw_line.starts_with(' ') || raw_line.starts_with('\t');
 
         // Inside a fenced code block.
         if b.code_lang.is_some() {
@@ -1090,7 +1024,8 @@ fn render_blocks(src: &str, doc: Doc) -> String {
         if let Some(rest) = trimmed.strip_prefix('>') {
             b.flush_para();
             b.close_list();
-            b.quote.push(rest.strip_prefix(' ').unwrap_or(rest).to_string());
+            b.quote
+                .push(rest.strip_prefix(' ').unwrap_or(rest).to_string());
             continue;
         }
 
@@ -1159,10 +1094,13 @@ fn render_page(src: &str, out: &str, md: &str) -> String {
         doc_dir: parent_dir(src),
         out_path: out,
     };
-    let body = render_blocks(md, Doc {
-        doc_dir: doc.doc_dir,
-        out_path: doc.out_path,
-    });
+    let body = render_blocks(
+        md,
+        Doc {
+            doc_dir: doc.doc_dir,
+            out_path: doc.out_path,
+        },
+    );
     let title = esc_text(&page_title(md, out));
     let prefix = root_prefix(out);
     let version = cargo::package_version();

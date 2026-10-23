@@ -7,7 +7,7 @@ pub fn build_frame() -> ScrollArea<State> {
     let frame: ScrollArea<State> = ScrollArea::default();
     frame
         .width(80)
-        .height(8)
+        .height(9)
         .kind(Some(FrameKind::Rounded))
         .focused_kind(Some(FrameKind::Rounded))
         .label("Package")

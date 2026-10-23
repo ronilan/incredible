@@ -6,7 +6,7 @@ use incredible_helpers_layout::arrangers::Arrangers;
 
 pub fn build_app() -> App<State> {
     let app: App<State> = App::new(AppOptions {
-        height: Some(8),
+        height: Some(9),
         ..Default::default()
     });
     app.exit_combination(Some(KeyCombination::new(Key::Escape, &[])));

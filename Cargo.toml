@@ -44,6 +44,10 @@ path = "tools/run/main.rs"
 name = "package"
 path = "tools/package/main.rs"
 
+[[bin]]
+name = "static_site"
+path = "static_site/main.rs"
+
 [features]
 default = []
 macos-native = [

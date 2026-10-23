@@ -6,7 +6,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::thread;
 
-pub(crate) fn copy_dir_all(src: &Path, dst: &Path) -> io::Result<()> {
+fn copy_dir_all(src: &Path, dst: &Path) -> io::Result<()> {
     fs::create_dir_all(dst)?;
     for entry in fs::read_dir(src)? {
         let entry = entry?;
@@ -61,7 +61,10 @@ fn inject_html(html: &str, meta: &HtmlMetadata) -> String {
             meta.keywords
         ));
     }
-    extra.push_str(&format!("<meta name=\"version\" content=\"{}\">\n", meta.version));
+    extra.push_str(&format!(
+        "<meta name=\"version\" content=\"{}\">\n",
+        meta.version
+    ));
 
     if let Some(pos) = out.find("</head>") {
         out.insert_str(pos, &extra);
@@ -95,11 +98,7 @@ fn replace_attr(html: &str, attr: &str, value: &str) -> String {
         }
         i += 1;
     }
-    if replaced {
-        result
-    } else {
-        out
-    }
+    if replaced { result } else { out }
 }
 
 pub fn build() -> io::Result<()> {
@@ -142,8 +141,17 @@ pub fn build() -> io::Result<()> {
     }
 
     let meta = cargo::html_metadata();
-    write_wasm_shell()?;
-    super::static_site::build_static_pages()?;
+    let index_from = match fs::read_to_string(Path::new("web").join("index.html")) {
+        Ok(s) => s,
+        Err(e) => return Err(e),
+    };
+    let injected = inject_html(&index_from, &meta);
+    write_file(&docs_dir().join("index.html"), &injected)?;
+
+    // Site content lives in static_site/: regenerate it so docs/ holds both
+    // experiences (overwrites index.html with the markdown-built home page,
+    // and writes the wasm.html shell).
+    super::run_static_site()?;
 
     if !meta.cname.is_empty() {
         write_file(&docs_dir().join("CNAME"), &format!("{}\n", meta.cname))?;
@@ -154,21 +162,7 @@ pub fn build() -> io::Result<()> {
     Ok(())
 }
 
-/// Write the WASM shell (`web/wasm.html` -> `docs/wasm.html`) with
-/// package metadata injected. Used by both the full `wasm` build and
-/// the fast `static` build so `docs/` stays consistent.
-pub fn write_wasm_shell() -> io::Result<()> {
-    let meta = cargo::html_metadata();
-    let index_from = match fs::read_to_string(Path::new("web").join("wasm.html")) {
-        Ok(s) => s,
-        Err(e) => return Err(e),
-    };
-    let injected = inject_html(&index_from, &meta);
-    write_file(&docs_dir().join("wasm.html"), &injected)?;
-    Ok(())
-}
-
-pub(crate) fn docs_dir() -> PathBuf {
+fn docs_dir() -> PathBuf {
     PathBuf::from("docs")
 }
 
@@ -245,11 +239,7 @@ fn send_status(stream: &mut TcpStream, code: u16, text: &str) -> io::Result<()> 
 }
 
 fn mime_for(path: &Path) -> &'static str {
-    match path
-        .extension()
-        .and_then(|e| e.to_str())
-        .unwrap_or("")
-    {
+    match path.extension().and_then(|e| e.to_str()).unwrap_or("") {
         "html" => "text/html; charset=utf-8",
         "css" => "text/css; charset=utf-8",
         "js" => "text/javascript; charset=utf-8",
