@@ -32,27 +32,14 @@ on:
 permissions:
   contents: write
 
-# Cargo.toml depends on a PRIVATE repo (incredible-alpha). Anonymous git over
-# HTTPS can't clone it, so every "https://github.com/" URL is rewritten to
-# carry a PAT (repo secret INCREDIBLE_ALPHA; Settings > Secrets and variables
-# > Actions). If this is removed, the build fails with git asking for a
-# username rather than an obvious "auth failed" message.
-#
-# The rewrite is set through GIT_CONFIG_* environment variables instead of
-# `git config --global` so it doesn't depend on ~/.gitconfig, the system
-# gitconfig, or credential helpers, all of which differ between runner images
-# (notably macOS arm). Every git process Cargo spawns inherits it.
-#
-# CARGO_NET_GIT_FETCH_WITH_CLI makes Cargo use the system `git`, which honors
-# the rewrite; Cargo's built-in libgit2 fetcher ignores it.
+# CARGO_NET_GIT_FETCH_WITH_CLI makes Cargo use the system `git`; Cargo's
+# built-in libgit2 fetcher would ignore the credential rewrite set up in each
+# job's "Allow Cargo to fetch the private dependency" step.
 # GIT_TERMINAL_PROMPT=0 makes any auth failure fail immediately instead of
 # trying to prompt on a runner that has no terminal.
 env:
   CARGO_NET_GIT_FETCH_WITH_CLI: "true"
   GIT_TERMINAL_PROMPT: "0"
-  GIT_CONFIG_COUNT: "1"
-  GIT_CONFIG_KEY_0: url.https://x-access-token:${{ secrets.INCREDIBLE_ALPHA }}@github.com/.insteadOf
-  GIT_CONFIG_VALUE_0: https://github.com/
 
 jobs:
   # Builds the plain terminal binary on four platforms. The package tool
@@ -78,6 +65,29 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      # Cargo.toml depends on a PRIVATE repo (incredible-alpha). Anonymous git
+      # over HTTPS can't clone it, so this rewrites every "https://github.com/"
+      # URL to carry a PAT (repo secret INCREDIBLE_ALPHA; Settings > Secrets and
+      # variables > Actions). Without it the build fails with git asking for a
+      # username rather than an obvious "auth failed" message.
+      #
+      # Exported through GIT_CONFIG_* env vars (via GITHUB_ENV) rather than
+      # `git config --global`, so it doesn't depend on ~/.gitconfig or
+      # credential helpers, which differ between runner images (notably macOS
+      # arm). It must run AFTER checkout: checkout fetches this repo with its
+      # own token, and the rewrite would override that with a PAT that may not
+      # have access to this repo.
+      - name: Allow Cargo to fetch the private dependency
+        shell: bash
+        env:
+          TOKEN: ${{ secrets.INCREDIBLE_ALPHA }}
+        run: |
+          {
+            echo "GIT_CONFIG_COUNT=1"
+            echo "GIT_CONFIG_KEY_0=url.https://x-access-token:${TOKEN}@github.com/.insteadOf"
+            echo "GIT_CONFIG_VALUE_0=https://github.com/"
+          } >> "$GITHUB_ENV"
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -151,6 +161,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      # Cargo.toml depends on a PRIVATE repo (incredible-alpha). Anonymous git
+      # over HTTPS can't clone it, so this rewrites every "https://github.com/"
+      # URL to carry a PAT (repo secret INCREDIBLE_ALPHA; Settings > Secrets and
+      # variables > Actions). Without it the build fails with git asking for a
+      # username rather than an obvious "auth failed" message.
+      #
+      # Exported through GIT_CONFIG_* env vars (via GITHUB_ENV) rather than
+      # `git config --global`, so it doesn't depend on ~/.gitconfig or
+      # credential helpers, which differ between runner images (notably macOS
+      # arm). It must run AFTER checkout: checkout fetches this repo with its
+      # own token, and the rewrite would override that with a PAT that may not
+      # have access to this repo.
+      - name: Allow Cargo to fetch the private dependency
+        shell: bash
+        env:
+          TOKEN: ${{ secrets.INCREDIBLE_ALPHA }}
+        run: |
+          {
+            echo "GIT_CONFIG_COUNT=1"
+            echo "GIT_CONFIG_KEY_0=url.https://x-access-token:${TOKEN}@github.com/.insteadOf"
+            echo "GIT_CONFIG_VALUE_0=https://github.com/"
+          } >> "$GITHUB_ENV"
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
@@ -193,6 +226,29 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      # Cargo.toml depends on a PRIVATE repo (incredible-alpha). Anonymous git
+      # over HTTPS can't clone it, so this rewrites every "https://github.com/"
+      # URL to carry a PAT (repo secret INCREDIBLE_ALPHA; Settings > Secrets and
+      # variables > Actions). Without it the build fails with git asking for a
+      # username rather than an obvious "auth failed" message.
+      #
+      # Exported through GIT_CONFIG_* env vars (via GITHUB_ENV) rather than
+      # `git config --global`, so it doesn't depend on ~/.gitconfig or
+      # credential helpers, which differ between runner images (notably macOS
+      # arm). It must run AFTER checkout: checkout fetches this repo with its
+      # own token, and the rewrite would override that with a PAT that may not
+      # have access to this repo.
+      - name: Allow Cargo to fetch the private dependency
+        shell: bash
+        env:
+          TOKEN: ${{ secrets.INCREDIBLE_ALPHA }}
+        run: |
+          {
+            echo "GIT_CONFIG_COUNT=1"
+            echo "GIT_CONFIG_KEY_0=url.https://x-access-token:${TOKEN}@github.com/.insteadOf"
+            echo "GIT_CONFIG_VALUE_0=https://github.com/"
+          } >> "$GITHUB_ENV"
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
