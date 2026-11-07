@@ -67,6 +67,8 @@ jobs:
       - name: Configure Git for Private Dependency
         run: |
           git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
+          git config --global --unset-all credential.helper || true
+          git config --global credential.helper ""
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -164,6 +166,10 @@ jobs:
       - name: Configure Git for Private Dependency
         run: |
           git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
+          git config --global --unset-all credential.helper || true
+          git config --global credential.helper ""
+          git config --global --unset-all credential.helper || true
+          git config --global credential.helper ""
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -186,6 +192,9 @@ jobs:
       # because only the system git picks up the credential rewrite configured
       # above (`git config --global url...insteadOf`) - libgit2 ignores it and
       # will fail to fetch the private incredible-alpha dependency without this.
+      # macOS ships an osxkeychain credential helper by default that can
+      # intercept the URL-embedded token and prompt for a password, so it is
+      # disabled above.
       - name: Build & bundle macOS native binary
         env:
           CARGO_NET_GIT_FETCH_WITH_CLI: "true"
@@ -230,6 +239,8 @@ jobs:
       - name: Configure Git for Private Dependency
         run: |
           git config --global url."https://${{ secrets.INCREDIBLE_ALPHA }}@github.com/".insteadOf "https://github.com/"
+          git config --global --unset-all credential.helper || true
+          git config --global credential.helper ""
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
