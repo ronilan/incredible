@@ -6,12 +6,24 @@ use crate::state::State;
 // images go to the ImageCache via register_image, everything else is UTF-8
 // text registered as a markdown document. Using include_bytes! for all
 // entries lets one macro handle both kinds with a single path list.
+fn strip_static_only(src: &str) -> String {
+    src.lines()
+        .filter(|line| {
+            let t = line.trim();
+            let has_comment =
+                t.find("<!--").is_some() && t[t.find("<!--").unwrap()..].find("-->").is_some();
+            !(has_comment && t.to_lowercase().contains("static"))
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 fn register_embedded(loader: &MarkdownLoader<State>, path: &str, bytes: &[u8]) {
     if is_supported_image_extension(path) {
         loader.register_image(path, bytes);
     } else {
         let text = std::str::from_utf8(bytes).expect("embedded text must be UTF-8");
-        loader.register(path, text);
+        loader.register(path, &strip_static_only(text));
     }
 }
 
@@ -39,9 +51,15 @@ pub fn build_loader() -> MarkdownLoader<State> {
 
     markdown_load!(
         loader,
-        // Site and blog
+        // Site, blog and showcase
         "./wasm.md",
         "./blog/index.md",
+        "./showcase/index.md",
+        "./showcase/images/incredible-calculator.png",
+        "./showcase/images/rewordle-rust.png",
+        "./showcase/images/shape-sorting.png",
+        "./showcase/images/incredible-flappy.png",
+        "./showcase/images/rusticon.png",
         "./blog/listen-to-the-redditors.md",
         "./blog/hello-world.md",
         "./blog/tui-games-in-80x24.md",

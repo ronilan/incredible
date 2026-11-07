@@ -31,6 +31,7 @@ const PAGES: &[(&str, &str)] = &[
     ),
     ("blog/hello-world.md", "blog/hello-world.html"),
     ("blog/tui-games-in-80x24.md", "blog/tui-games-in-80x24.html"),
+    ("showcase/index.md", "showcase/index.html"),
     ("markdowns/index.md", "markdowns/index.html"),
     ("markdowns/AI_POLICY.md", "markdowns/AI_POLICY.html"),
     ("markdowns/CONTRIBUTING.md", "markdowns/CONTRIBUTING.html"),
@@ -74,6 +75,22 @@ pub fn build_static_pages() -> io::Result<()> {
     let images_from = Path::new("blog/images");
     if images_from.exists() {
         let images_to = crate::shell::docs_dir().join("blog/images");
+        fs::create_dir_all(&images_to)?;
+        for entry in fs::read_dir(images_from)? {
+            let entry = entry?;
+            let name = entry.file_name().to_string_lossy().into_owned();
+            if name.starts_with('.') {
+                continue;
+            }
+            if entry.file_type()?.is_file() {
+                fs::copy(entry.path(), images_to.join(name))?;
+            }
+        }
+    }
+
+    let images_from = Path::new("showcase/images");
+    if images_from.exists() {
+        let images_to = crate::shell::docs_dir().join("showcase/images");
         fs::create_dir_all(&images_to)?;
         for entry in fs::read_dir(images_from)? {
             let entry = entry?;
@@ -1007,6 +1024,30 @@ fn render_blocks(src: &str, doc: Doc) -> String {
             b.close_list();
             b.html.push(rule_html());
             continue;
+        }
+
+        // Static-only notes: HTML comments marked `static`/`static-only`
+        // are rendered as a visible note in the static site only.
+        if let Some(start) = trimmed.find("<!--") {
+            if let Some(end_rel) = trimmed[start..].find("-->") {
+                let end = start + end_rel + 3;
+                let lower = trimmed.to_lowercase();
+                if lower.contains("static") {
+                    b.flush_para();
+                    b.flush_quote();
+                    b.close_list();
+                    let mut inner = trimmed[start + 4..end - 3].trim().to_string();
+                    for prefix in ["static-only:", "static:"] {
+                        if let Some(rest) = inner.strip_prefix(prefix) {
+                            inner = rest.trim().to_string();
+                            break;
+                        }
+                    }
+                    b.html
+                        .push(format!("<p><em>{}</em></p>", render_inline(&inner, &b.doc)));
+                    continue;
+                }
+            }
         }
 
         // Raw HTML / embeds.

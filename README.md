@@ -27,4 +27,4 @@ See [Development](./markdowns/DEVELOPMENT.md) and [Development Environment Prere
 
 ---
 
-*Fabriqué au Canada : Made in Canada 🇨🇦*
+*Fabriqué au Canada : Made in Canada 🇨🇦 : 2026*

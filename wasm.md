@@ -13,7 +13,8 @@ Incredible is **New**, **Experimental**, **Modular**, **Declarative**, **Event D
 
 The framework is built from the ground up following basic UI principles. It implements an event loop, a typed element tree structure and a declarative theming engine. It allows the composition of new elements from encapsulated and/or fully reusable sub elements. It provides out of the box support for most modern terminal capabilities.
 
-Read the [Blog](./blog/index.md).
+- Browse [Public Example Showcase](./showcase/index.md) of apps made with Incredible.
+- Read the [Blog](./blog/index.md).
 
 ## Status
 
@@ -24,6 +25,6 @@ Incredible is currently in **private alpha**.
 
 ---
 
-[Blog](./blog/index.md) | [.md](./markdowns/index.md) | [GitHub](https://github.com/ronilan/incredible) | [HTML](https://www.incredible.rs/) 
+[Blog](./blog/index.md) | [Showcase](./showcase/index.md) | [.md](./markdowns/index.md) | [GitHub](https://github.com/ronilan/incredible) | [HTML](https://www.incredible.rs/) 
 
-*Fabriqué au Canada : Made in Canada 🇨🇦 : August 2026*
+*Fabriqué au Canada : Made in Canada 🇨🇦 : 2026*

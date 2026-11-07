@@ -2,6 +2,8 @@
 
 ---
 
+<!-- static-only: ⚠️ This post has interactive embeds and talks about the framework terminal UX. See the [WASM version](./wasm.html#blog/hello-world.md) for a better understanding. -->.
+
 # Hello World
 
 ◦ Hello 👋🏿 Bonjour 👋🏾 Привет 👋🏽 你好 👋🏼 안녕하세요 👋🏻 こんにちは 👋 नमस्ते ◦
