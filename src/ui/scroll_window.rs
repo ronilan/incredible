@@ -6,7 +6,9 @@ use crate::state::State;
 
 pub fn build_scroll_window() -> ScrollArea<State> {
     let scroll_window: ScrollArea<State> = ScrollArea::default();
-    scroll_window.conf_scrollbars_unframed().clip_padding(ClipPadding::new(0, 1, 1, 0));
+    scroll_window
+        .conf_scrollbars_unframed()
+        .clip_padding(ClipPadding::new(0, 1, 1, 0));
 
     scroll_window.on_window(|el, _state, event| {
         if event.window == Window::Resize {

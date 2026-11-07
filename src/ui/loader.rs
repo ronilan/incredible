@@ -33,7 +33,9 @@ macro_rules! markdown_load {
 
 pub fn build_loader() -> MarkdownLoader<State> {
     let loader = MarkdownLoader::<State>::new();
-    loader.initial_path("./wasm.md").register_title("./wasm.md", "Incredible. A Modern Rust TUI Framework");
+    loader
+        .initial_path("./wasm.md")
+        .register_title("./wasm.md", "Incredible. A Modern Rust TUI Framework");
 
     markdown_load!(
         loader,

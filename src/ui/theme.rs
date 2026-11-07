@@ -31,29 +31,26 @@ pub fn build_theme() {
         s.hovered.pointer.set(Some(PointerShape::Pointer));
     });
 
-    theme_rule::<Style>("ScrollArea::VerticalLine", |s| {
+    theme_rule::<Style>("ScrollArea::VerticalScrollbar", |s| {
         s.base.decor.faint.set(Some(true));
         s.dragged.decor.faint.set(Some(false));
-        s.hovered.pointer.set(Some(PointerShape::Grab));
-        s.dragged.pointer.set(Some(PointerShape::Grabbing))
     });
 
-    theme_rule::<VerticalLineStyle>("ScrollArea::VerticalLine", |s| {
+    theme_rule::<VerticalLineStyle>("ScrollArea::VerticalScrollbar", |s| {
         s.base.kind.set(Some(VerticalLineKind::Thin));
         s.hovered.kind.set(Some(VerticalLineKind::Thick));
+        s.dragged.kind.set(Some(VerticalLineKind::Thick));
     });
 
-    theme_rule::<Style>("ScrollArea::HorizontalLine", |s| {
+    theme_rule::<Style>("ScrollArea::Horizontalcrollbar", |s| {
         s.base.decor.faint.set(Some(true));
         s.dragged.decor.faint.set(Some(false));
-        // TODO: for drag need not reset whn off element (special case)
-        s.hovered.pointer.set(Some(PointerShape::Grab));
-        s.dragged.pointer.set(Some(PointerShape::Grabbing))
     });
 
-    theme_rule::<HorizontalLineStyle>("ScrollArea::HorizontalLine", |s| {
+    theme_rule::<HorizontalLineStyle>("ScrollArea::HorizontalScrollbar", |s| {
         s.base.kind.set(Some(HorizontalLineKind::Thin));
         s.hovered.kind.set(Some(HorizontalLineKind::Thick));
+        s.dragged.kind.set(Some(HorizontalLineKind::Thick));
     });
 
     theme_rule::<Style>("MarkdownRule::HorizontalLine", |s| {
