@@ -983,9 +983,9 @@ fn render_blocks(src: &str, doc: Doc) -> String {
         }
 
         // Fence open (also indented inside list items).
-        if trimmed.starts_with("```") {
+        if let Some(rest) = trimmed.strip_prefix("```") {
             b.code_in_list = b.list_current.is_some();
-            b.code_lang = Some(trimmed[3..].trim().to_string());
+            b.code_lang = Some(rest.trim().to_string());
             continue;
         }
 

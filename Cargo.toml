@@ -83,3 +83,10 @@ incredible_window_macos = { git = "https://github.com/ronilan/incredible-alpha",
 [target.'cfg(target_os = "windows")'.dependencies]
 incredible_window_windows = { git = "https://github.com/ronilan/incredible-alpha", optional = true }
 windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_System_LibraryLoader", "Win32_Storage_FileSystem"] }
+
+[lints.clippy]
+collapsible-if = "allow"
+module_inception = "allow"
+# Listener callback table + traversal helpers are inherently complex generic
+# types. Aliasing them would leak into public API docs for no benefit.
+type_complexity = "allow"

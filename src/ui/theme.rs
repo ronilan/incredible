@@ -22,7 +22,6 @@ pub fn build_theme() {
     theme_rule::<Style>("MarkdownParagraph::Link", |s| {
         s.base.decor.underline.set(Some(UnderlineKind::Dotted));
         s.hovered.decor.color.set(Some(Color::from(11)));
-        s.hovered.pointer.set(Some(PointerShape::Pointer));
     });
 
     theme_rule::<Style>("MarkdownParagraph::MarkdownRelativeLink", |s| {
